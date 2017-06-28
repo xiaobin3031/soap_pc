@@ -1,0 +1,137 @@
+<div class="pageheader">
+    <ul class="hornav">
+        <li class="current"><a href="#weekreportPandect">当周</a></li>
+        <li><a href="#weekreportHistory">历史</a></li>
+        <li><a href="#weekreportConfig">配置</a></li>
+    </ul>
+</div>
+<div class="contentwrapper">
+    <div id="weekreportPandect" class="subcontent">
+        <ul class="buttonlist">
+            <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#weekreportAddModal">新增</button></li>
+            <li><button class="stdbtn btn_blue" type="button" onclick="modifyWeekreport()">修改</button></li>
+            <li><button class="stdbtn btn_red" type="button" onclick="deleteWeekreport()">删除</button></li>
+            <li><button class="stdbtn btn_blue" type="button" onclick="overWork('begin')">加班开始</button></li>
+            <li><button class="stdbtn btn_blue" type="button" onclick="overWork('end')">加班结束</button></li>
+            <li><button class="stdbtn btn_blue" type="button" onclick="weekreportToExcel()">导出Excel</button></li>
+        </ul>
+        <table id="weekreportTable" cellpadding="0" cellspacing="0" border="0" class="stdtable stdtablecb overviewtable2">
+            <colgroup>
+                <col class="con0" style="width:10%;"/>
+                <col class="con1" style="width:10%;"/>
+                <col class="con0"/>
+                <col class="con1" style="width:10%;"/>
+                <col class="con0" style="width:10%" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th class="head0" data-field="_index"><input title="checkbox" type="checkbox" />序号</th>
+                <th class="head1" data-field="work_time">工作时间</th>
+                <th class="head0" data-field="content">工作内容</th>
+                <th class="head1" data-field="is_trip=isCommon">是否出差</th>
+                <th class="head0" data-field="status=status">状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="weekreportHistory" class="subcontent" style="display:none;"></div>
+    <div id="weekreportConfig" class="subcontent" style="display:none;"></div>
+</div>
+<div id="weekreportAddModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="false"></div>
+<script src="/page/workspace/weekreport/weekreport.js"></script>
+<script>
+    $('#weekreportAddModal').load('/page/workspace/weekreport/add.html');
+    $('#weekreportConfig').load('/page/workspace/weekreport/config.html');
+
+    jQuery('#accordion').accordion({autoHeight:  false});
+
+    getWeekreportList();
+
+    function modifyWeekreport(){
+        var $table = $('#weekreportTable');
+        var index = $table.find('tbody').find(':checkbox:checked').closest('tr').index();
+        if(index == undefined || index < 0){
+            return;
+        }
+        var data = $.extend({},$table.data(constants.staticRef.list)[index]);
+        if(data.work_time){
+            var date = new Date(data.work_time);
+            data.week = date.getDay();
+        }
+        X.putDataIntoForm('#weekreportForm',data,'#weekreportAddModal');
+    }
+
+    function weekreportToExcel(){
+        var mom = moment();
+        var day = mom.day();
+        if(day == 0){
+            mom = mom.add('w',-1);
+        }
+        var date = mom.day(1).format('YYYY-MM-DD');
+        X.ajax({beginDate : date},function(data){
+
+        },'weekreport/toExcel');
+    }
+
+    function deleteWeekreport(){
+        var $table = $('#weekreportTable');
+        var index = $table.find('tbody').find(':checkbox:checked').closest('tr').index();
+        if(index == undefined || index < 0){
+            return;
+        }
+        var data = $.extend({},$table.data(constants.staticRef.list)[index]);
+        X.confirm(function(){
+           X.ajax({'weekreport.report_id':data.report_id},function(data){
+              if(data.success){
+                  getWeekreportList();
+                  $('#confirmModal').modal('hide');
+              }
+           },'weekreport/delete');
+        });
+    }
+    function overWork(type){
+        X.ajax({type : type},function(data){
+            if(data.success){
+
+            }else{
+                X.dialog(data.message);
+            }
+        },'weekreport/overWork');
+    }
+    //获取列表
+    function getWeekreportList(){
+        var mom = moment();
+        var day = mom.day();
+        if(day == 0){
+            mom = mom.add('w',-1);
+        }
+        var beginDate = mom.day(1).format('YYYY-MM-DD');
+        X.ajax({beginDate : beginDate},function(data){
+            X.loadTableData('#weekreportTable',data,function(){
+                var $table = $('#weekreportTable');
+                var $tbody = $table.find('tbody');
+                $tbody.find('tr').find('td:first').each(function(){
+                   var text = $(this).text();
+                   $(this).empty().append('<label><input title="'+text+'" type="checkbox" />'+text+'</label>');
+                });
+                $table.find('thead').find('tr').find('th:first').find('input:checkbox').click(function(){
+                    $tbody.find('tr').find('td:first').find('input:checkbox').prop('checked',$(this).prop('checked'));
+                });
+                var $tds = $tbody.find('tr').find('td:first');
+                $tds.find('input:checkbox').click(function(){
+                    var $td = $(this);
+                    $tds.find('input:checkbox:checked').each(function(){
+                       if(!$td.is($(this))){
+                           $(this).prop('checked',!$td.prop('checked'));
+                       }
+                    });
+                    $table.find('thead').find('tr').find('th:first').find('input:checkbox').prop('checked',$td.prop('checked'));
+                });
+            });
+        },'weekreport/list');
+    }
+</script>

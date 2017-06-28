@@ -1,6 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 .gitignore
 .idea/
-soap.iml
-soap.rar
+soap_pc.iml
 target/
+src/test/

@@ -1,0 +1,76 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <form id="userForm" class="form-horizontal" role="form">
+                <input type="hidden" name="users.user_id" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">用户编号</div>
+                    <div class="col-sm-4">
+                        <input title="username" class="form-control" name="users.user_name" />
+                    </div>
+                    <div class="col-sm-2 control-label">用户名</div>
+                    <div class="col-sm-4">
+                        <input title="name" class="form-control" name="users.name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">状态</div>
+                    <div class="col-sm-4">
+                        <select disabled title="status" class="form-control" name="users.status"></select>
+                    </div>
+
+                    <div class="col-sm-2 control-label">手机号</div>
+                    <div class="col-sm-4">
+                        <input title="mobile" class="form-control" name="users.mobile" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">入职时间</div>
+                    <div class="col-sm-4">
+                        <input class="form-control" title="office_time" name="users.office_time" id="office_time" />
+                    </div>
+                    <div class="col-sm-2 control-label">转正时间</div>
+                    <div class="col-sm-4">
+                        <input title="practice_over_time" type="text" name="users.practice_over_time"  class="hasDatepicker" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">离职时间</div>
+                    <div class="col-sm-4">
+                        <input title="leave_time" type="text" name="users.leave_time" class="hasDatepicker" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-6">
+                    <button type="button" class="btn btn-success" onclick="$('#userForm').submit()">保存</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-default btn-close" onclick="X.closeForm('#userForm','#userAddModal')">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var userForm = $('#userForm');
+    userForm.validate({
+       submitHandler : function(form){
+           X.ajax($(form).serialize(),function(data){
+                if(data.success){
+                    $('#userAddModal').find('.modal-footer').find('.btn-close').click();
+                    userList();
+                }
+           },'users/save');
+       }
+    });
+    userForm.find('select[name="users.status"]').empty().append(X.selectFromConst(constants.userStatus));
+    $(".form_datetime").datetimepicker({
+        format: "dd MM yyyy - hh:ii"
+    });
+</script>

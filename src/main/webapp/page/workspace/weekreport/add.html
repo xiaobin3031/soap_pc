@@ -1,0 +1,79 @@
+<div class="modal-dialog" style="width:60%">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" id="weekreportForm" role="form">
+                <input type="hidden" name="weekreport.report_id" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作时间</label>
+                    <div class="col-sm-2">
+                        <select title="工作时间" name="week" class="form-control" data-select-data="weeks.zh.n"></select>
+                    </div>
+                    <label class="col-sm-1 control-label">状态</label>
+                    <div class="col-sm-2">
+                        <select title="状态" name="weekreport.status" class="form-control">
+                        </select>
+                    </div>
+                    <label>
+                        <label class="col-sm-1 control-label"></label>
+                        <span class="formwrapper">
+                        <input name="weekreport.is_trip" type="checkbox" title="出差"/> 出差
+                    </span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作内容</label>
+                    <div class="col-sm-8">
+                        <textarea required name="weekreport.content" title="工作内容" placeholder="请输入工作内容" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作建议</label>
+                    <div class="col-sm-8">
+                        <textarea name="weekreport.work_suggest" title="工作建议" placeholder="请输入工作建议" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">存在问题</label>
+                    <div class="col-sm-8">
+                        <textarea name="weekreport.remain_problems" title="存在问题" placeholder="请输入存在问题" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">备注</label>
+                    <div class="col-sm-8">
+                        <textarea name="weekreport.notes" title="存在备注" placeholder="请输入备注" rows="2"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-6">
+                    <button type="button" class="btn btn-success" onclick="$('#weekreportForm').submit()">保存</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-default btn-close" onclick="X.closeForm('#weekreportForm','#weekreportAddModal')">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var weekreportForm = $('#weekreportForm');
+    weekreportForm.validate({
+        submitHandler : function(form){
+            X.ajax($(form).serialize(),function(data){
+                if(data.success){
+                    $('#weekreportAddModal').find('.modal-footer').find('.btn-close').click();
+                    getWeekreportList();
+                }
+            },'weekreport/save');
+        }
+    });
+    weekreportForm.find('select[name="weekreport.status"]').empty().append(X.selectFromConst(constants.status));
+    weekreportForm.find('select[name="week"]').empty().append(X.selectFromConst(constants.weeks.zh.n));
+    weekreportForm.find('select[name="week"]').find('option[value="'+new Date().getDay()+'"]').prop('selected',true);
+</script>
