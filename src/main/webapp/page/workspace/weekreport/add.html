@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">工作时间</label>
                     <div class="col-sm-2">
-                        <select title="工作时间" name="week" class="form-control" data-select-data="weeks.zh.n"></select>
+                        <select title="工作时间" name="week" class="form-control"></select>
                     </div>
                     <label class="col-sm-1 control-label">状态</label>
                     <div class="col-sm-2">
@@ -55,7 +55,7 @@
                     <button type="button" class="btn btn-success" onclick="$('#weekreportForm').submit()">保存</button>
                 </div>
                 <div class="col-sm-2">
-                    <button type="button" class="btn btn-default btn-close" onclick="X.closeForm('#weekreportForm','#weekreportAddModal')">取消</button>
+                    <button type="button" class="btn btn-default btn-close" onclick="X.closeForm('#weekreportForm','#weekreportAddModal',weekreportChooseToday)">取消</button>
                 </div>
             </div>
         </div>
@@ -68,12 +68,12 @@
             X.ajax($(form).serialize(),function(data){
                 if(data.success){
                     $('#weekreportAddModal').find('.modal-footer').find('.btn-close').click();
-                    getWeekreportList();
+                    $('#weekreportTable').bootstrapTable('refresh');
                 }
             },'weekreport/save');
         }
     });
     weekreportForm.find('select[name="weekreport.status"]').empty().append(X.selectFromConst(constants.status));
     weekreportForm.find('select[name="week"]').empty().append(X.selectFromConst(constants.weeks.zh.n));
-    weekreportForm.find('select[name="week"]').find('option[value="'+new Date().getDay()+'"]').prop('selected',true);
+    weekreportChooseToday();
 </script>

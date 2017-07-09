@@ -2,49 +2,51 @@
     <ul class="buttonlist">
         <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#userAddModal">新增</button></li>
         <li><button class="stdbtn btn_blue" type="button" onclick="modifyUsers()">修改</button></li>
+        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#userLeaveModal">请假</button></li>
     </ul>
-    <table id="userTable" cellpadding="0" cellspacing="0" border="0" class="stdtable stdtablecb overviewtable2">
-        <colgroup>
-            <col class="con0" style="width:10%;"/>
-            <col class="con1" style="width:10%;"/>
-            <col class="con0"/>
-            <col class="con1" style="width:10%;"/>
-            <col class="con0" style="width:10%" />
-        </colgroup>
-        <thead>
-        <tr>
-            <th class="head0" data-field="_index"><input title="checkbox" type="checkbox" />序号</th>
-            <th class="head1" data-field="user_name">用户编号</th>
-            <th class="head0" data-field="name">用户名</th>
-            <th class="head1" data-field="mobile">手机号</th>
-            <th class="head0" data-field="status=userStatus">状态</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-        </tr>
-        </tbody>
+    <table id="userTable" data-pagination="true">
     </table>
 </div>
 <div class="modal fade" id="userAddModal" tabindex="-1" role="dialog" data-backdrop="false"></div>
+<div class="modal fade" id="userLeaveModal" tabindex="-1" role="dialog" data-backdrop="false"></div>
 <script src="/page/sys/users/user.js"></script>
 <script>
     $('#userAddModal').load('/page/sys/users/add.html');
-    userList();
-    function userList(){
-        X.ajax({},function(data){
-            X.loadTableData('#userTable',data);
-        },'users/list');
-    }
+    $('#userLeaveModal').load('/page/sys/users/userLeave.html');
+
+    $('#userTable').bootstrapTable({
+        url : 'users/list',
+        singleSelect : true,
+        clickToSelect : true,
+        columns : [{
+            field : '',
+            title : '',
+            checkbox : true
+        },{
+            field : 'user_name',
+            title : '用户编号'
+        },{
+            field : 'name',
+            title : '用户名'
+        },{
+            field : 'mobile',
+            title : '手机号'
+        },{
+            field : 'status',
+            title : '状态',
+            formatter : function(v){
+                return constants.userStatus[v] || v;
+            }
+        }]
+    });
+
     function modifyUsers(){
-        var $form = $('#userForm');
-        var $checkedInput = $form.find('input:checkbox:checked');
-        if($checkedInput.size() > 1){
-            X.dialog('只能选择一条数据');
+        var $table = $('#userTable');
+        var data = $table.bootstrapTable('getSelections');
+        if(data.length == 0){
+            X.dialog('请选择一条数据');
             return;
         }
-        var index = $checkedInput.closed('tr').index();
-        var data = $('#userTable').data(constants.staticRef.list)[index];
-        X.putDataIntoForm('#userForm',data,'#userAddModal');
+        X.putDataIntoForm('#userForm',data[0],'#userAddModal');
     }
 </script>

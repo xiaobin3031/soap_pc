@@ -1,6 +1,7 @@
 package com.xiaobin.service.sys;
 
 import com.xiaobin.model.ReturnModel;
+import com.xiaobin.model.model.UserAttr;
 import com.xiaobin.model.model.Users;
 import com.xiaobin.service.base.BaseService;
 import com.xiaobin.util.Util;
@@ -39,6 +40,19 @@ public class UsersService extends BaseService{
         users.setStatus("99");
         users.setUpdateTime(Util.currentTimeStamp());
         users.update();
+        model.setSuccess(true);
+    }
+
+    public void userLeave(UserAttr userAttr,ReturnModel model){
+        userAttr.setAttrId("user.leave.date.begin");
+        userAttr.setAttrType("user.leave");
+        userAttr.setAttrValue(userAttr.get("beginTime"));
+        userAttr.save();
+
+        userAttr.setAttrId("user.leave.date.end");
+        userAttr.setAttrValue(userAttr.get("endTime"));
+        userAttr.save();
+
         model.setSuccess(true);
     }
 }

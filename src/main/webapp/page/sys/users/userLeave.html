@@ -1,0 +1,30 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <form id="userForm" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="control-label col-sm-2">开始时间</label>
+                    <div class="col-sm-4" id="datetimepicker">
+                        <input title="beginTime" class="form-control"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-6">
+                    <button type="button" class="btn btn-success" onclick="$('#userForm').submit()">保存</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-default btn-close" onclick="X.closeForm('#userForm','#userAddModal')">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#datetimepicker').datepicker();
+</script>

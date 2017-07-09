@@ -124,18 +124,16 @@ var X = {
     },
     selectFromConst : function(oConst){
         var t = new Txt();
-        var keys = oConst.key;
-        var values = oConst.value;
-        for(var x in keys){
+        for(var x in oConst){
             t._('<option value="')
-                ._(keys[x])
+                ._(x)
                 ._('">')
-                ._(values[x])
+                ._(oConst[x])
                 ._('</option>');
         }
         return t.toString();
     },
-    closeForm : function(form,modal){
+    closeForm : function(form,modal,callback){
         var $form = $(form);
         $form[0].reset();
         var $input = $form.find('input:hidden');
@@ -143,6 +141,9 @@ var X = {
             $input.val('');
         }
         $(modal).modal('hide');
+        if(callback){
+            callback();
+        }
     },
     loadTableData : function(table,data,callback){
         var $table = $(table);
@@ -155,26 +156,32 @@ var X = {
         if(data){
             var $thead = $table.find('thead');
             var $ths = $thead.find('> tr > th');
-            var fields = [];
+            var fields = {};
             var transFields = [];
+            var opts = {};
             $ths.each(function(){
                 var field = $(this).attr('data-field');
-                if(field.indexOf('=') > 0){
-                    field = field.split('=');
-                    fields.push(field[0]);
-                    transFields.push(field[1]);
-                }else{
-                    fields.push(field);
-                    transFields.push(field);
-                }
+                fields[field] = $.extend(opts,JSON.parse('{' + $(this).attr('data-format') + '}'));
             });
             for(var i=0;i<data.length;i++){
-                $tbody.append('<tr></tr>');
-                var $tr = $tbody.find('tr:last');
+                var $tr = $('tr');
+                $tbody.append($tr);
                 var obj = data[i];
+                for(var x in fields){
+                    var text = '';
+                    if(fields[x]){
+                        var opt = fields[x];
+                        if(x == '$index'){
+                            if(opt.type == 'checkbox'){
+                                text += '<input title="checkbox" type="checkbox" />';
+                            }
+                        }
+
+                    }
+                }
                 for(var j=0;j<transFields.length;j++){
-                    $tr.append('<td></td>');
-                    var $td = $tr.find('td:last');
+                    var $td = $('td');
+                    $tr.append($td);
                     var transField = transFields[j];
                     var value = obj[fields[j]];
                     var text = value;
@@ -204,27 +211,27 @@ var X = {
     putDataIntoForm : function(form,data,modal){
         var $form = $(form);
         for(var x in data){
-            var $input = $form.find('input[name$="'+x+'"][type="text"]');
+            var $input = $form.find('input[name$=".'+x+'"]');
             if($input.length > 0){
                 $input.val(data[x]);
                 continue;
             }
-            $input = $form.find('input[name$="' + x + '"][type="hidden"]');
+            $input = $form.find('input[name$=".' + x + '"][type="hidden"]');
             if($input.length > 0){
                 $input.val(data[x]);
                 continue;
             }
-            var $select = $form.find('select[name$="' + x + '"]');
+            var $select = $form.find('select[name$=".' + x + '"]');
             if($select.length > 0){
                 $select.find('option[value="' + data[x] + '"]').prop('selected',true);
                 continue;
             }
-            var $textarea = $form.find('textarea[name$="' + x + '"]');
+            var $textarea = $form.find('textarea[name$=".' + x + '"]');
             if($textarea.length > 0){
                 $textarea.val(data[x]);
                 continue;
             }
-            var $checkbox = $form.find('input[name$="' + x + '"][type="checkbox"]');
+            var $checkbox = $form.find('input[name$=".' + x + '"][type="checkbox"]');
             if(1 == data[x] || '1' == data[x]){
                 $checkbox.prop('checked',true);
             }

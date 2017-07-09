@@ -1,0 +1,130 @@
+<style>
+    #calendarContent .year i{
+        cursor : pointer
+    }
+</style>
+<div class="contentwrapper" id="calendarContent">
+    <div class="row">
+        <!-- year -->
+        <div class="col-sm-12 year">
+            <div class="col-sm-5" style="text-align:right;">
+                <i class="glyphicon glyphicon-backward" style="margin-right:20px;" onclick="addYM(-1,0)"></i>
+                <i class="glyphicon glyphicon-chevron-left" onclick="addYM(0,-1)"></i>
+            </div>
+            <div class="col-sm-2 year-num" style="text-align:center;">
+                <span></span>
+            </div>
+            <div class="col-sm-5" style="text-align:left;">
+                <i class="glyphicon glyphicon-chevron-right" onclick="addYM(0,1)"></i>
+                <i class="glyphicon glyphicon-forward" style="margin-left:20px;" onclick="addYM(1,0)"></i>
+            </div>
+        </div>
+        <!-- week -->
+        <div class="col-sm-12 week" style="background-color:#f7f7f7;margin-top:20px;">
+            <div class="row"></div>
+        </div>
+        <!-- day -->
+        <div class="col-sm-12 day">
+
+        </div>
+    </div>
+</div>
+<script>
+    var calendar;
+    init();
+    function init(){
+        calendar = {};
+        addYM();
+        printWeek();
+    }
+    function addYM(y,m){
+        var mom = moment();
+        if(calendar.year != undefined){
+            mom = mom.year(calendar.year);
+        }
+        if(calendar.month != undefined){
+            mom = mom.month(calendar.month);
+        }
+        mom = mom.add('year',y || 0).add('month',m || 0);
+        calendar.year = mom.year();
+        calendar.month = mom.month();
+        $('#calendarContent').find('.year').find('div.year-num').find('span').text(calendar.year + ' 年 ' + (calendar.month + 1) + ' 月');
+        printDay();
+        initScript();
+    }
+    function printWeek(){
+        var weeks = constants.weeks.zh.s;
+        var $week = $('#calendarContent').find('div.week').find('div.row');
+        $week.empty();
+        for(var x=0;x<7;x++){
+            var $div = $('<div></div>');
+            $week.append($div);
+            if(x == '0' || x == '6'){
+                $div.addClass("col-sm-1");
+            }else{
+                $div.addClass("col-sm-2");
+            }
+            $div.css('text-align','center');
+            $div.css('font-weight','bold');
+            $div.css('background-color','#f7f7f7');
+            $div.css('border','1px solid #ccc');
+            if(x > 0){
+                $div.css('border-left-width','0');
+            }
+            var $span = $('<span></span>');
+            $span.text(weeks[x]);
+            $div.append($span);
+        }
+    }
+    function printDay(){
+        var mom = moment();
+        if(calendar.year != undefined){
+            mom = mom.year(calendar.year);
+        }
+        if(calendar.month != undefined){
+            mom = mom.month(calendar.month);
+        }
+        var endMoment = mom.endOf("month");
+        var days = endMoment.date();
+        var startMoment = mom.startOf("month");
+        var $day = $('#calendarContent').find('div.day');
+        $day.empty();
+        while(days > 0){
+            var $row = $('<div></div>');
+            $day.append($row);
+            $row.addClass('row');
+            $row.css('height','100px');
+            for(var i=0;i<7;i++){
+                var $div = $('<div></div>');
+                if(i == 0 || i == 6){
+                    $div.addClass('col-sm-1');
+                }else{
+                    $div.addClass('col-sm-2');
+                }
+                $div.css('height','100%');
+                $div.css('border','1px solid #ccc');
+                $div.css('border-top-width','0');
+                $div.css('padding','5px 10px');
+                if(i > 0){
+                    $div.css('border-left-width','0');
+                }
+                $row.append($div);
+                if(startMoment.day() == i && days > 0){
+                    var $span = $('<span></span>');
+                    $span.css('float','right');
+                    $span.text(startMoment.date());
+                    $div.append($span);
+                    startMoment = startMoment.add(1,'d');
+                    days--;
+                }
+            }
+        }
+    }
+
+    function initScript(){
+        var $day = $('#calendarContent').find('div.day');
+        $day.find('> div.row').find('> div').dblclick(function(){
+            alert(1);
+        });
+    }
+</script>

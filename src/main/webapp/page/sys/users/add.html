@@ -30,17 +30,17 @@
                 <div class="form-group">
                     <div class="col-sm-2 control-label">入职时间</div>
                     <div class="col-sm-4">
-                        <input class="form-control" title="office_time" name="users.office_time" id="office_time" />
+                        <input class="form-control" title="office_time" name="users.office_time"/>
                     </div>
                     <div class="col-sm-2 control-label">转正时间</div>
                     <div class="col-sm-4">
-                        <input title="practice_over_time" type="text" name="users.practice_over_time"  class="hasDatepicker" />
+                        <input title="practice_over_time" class="form-control" name="users.practice_over_time"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-2 control-label">离职时间</div>
                     <div class="col-sm-4">
-                        <input title="leave_time" type="text" name="users.leave_time" class="hasDatepicker" />
+                        <input title="leave_time" name="users.leave_time" class="form-control" />
                     </div>
                 </div>
             </form>
@@ -64,13 +64,10 @@
            X.ajax($(form).serialize(),function(data){
                 if(data.success){
                     $('#userAddModal').find('.modal-footer').find('.btn-close').click();
-                    userList();
+                    $('#userTable').bootstrapTable('refresh');
                 }
            },'users/save');
        }
     });
     userForm.find('select[name="users.status"]').empty().append(X.selectFromConst(constants.userStatus));
-    $(".form_datetime").datetimepicker({
-        format: "dd MM yyyy - hh:ii"
-    });
 </script>

@@ -32,10 +32,6 @@
                 <th class="head0" data-field="status=status">状态</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-            </tr>
-            </tbody>
         </table>
     </div>
     <div id="weekreportHistory" class="subcontent" style="display:none;"></div>
@@ -49,15 +45,46 @@
 
     jQuery('#accordion').accordion({autoHeight:  false});
 
-    getWeekreportList();
+    var mom = moment();
+    var day = mom.day();
+    if(day == 0){
+        mom = mom.add('w',-1);
+    }
+    var beginDate = mom.day(1).format('YYYY-MM-DD');
+    $('#weekreportTable').bootstrapTable({
+       url : 'weekreport/list',
+        singleSelect : true,
+        clickToSelect : true,
+        queryParams : {beginDate : beginDate},
+        columns : [{
+           field : '',
+            title : '',
+            checkbox : true
+        },{
+           field : 'work_time',
+            title : '工作时间'
+        },{
+           field : 'content',
+            title : '工作内容'
+        },{
+           field : 'is_trip',
+            title : '是否出差',
+            formatter : function(v){
+               return constants.isCommon[v] || v;
+            }
+        },{
+           field : 'status',
+            title : '状态',
+            formatter : function(v){
+               return constants.status[v] || v;
+            }
+        }]
+    });
 
     function modifyWeekreport(){
         var $table = $('#weekreportTable');
-        var index = $table.find('tbody').find(':checkbox:checked').closest('tr').index();
-        if(index == undefined || index < 0){
-            return;
-        }
-        var data = $.extend({},$table.data(constants.staticRef.list)[index]);
+        var data = $table.bootstrapTable('getSelections');
+        data = data[0];
         if(data.work_time){
             var date = new Date(data.work_time);
             data.week = date.getDay();
@@ -79,15 +106,12 @@
 
     function deleteWeekreport(){
         var $table = $('#weekreportTable');
-        var index = $table.find('tbody').find(':checkbox:checked').closest('tr').index();
-        if(index == undefined || index < 0){
-            return;
-        }
-        var data = $.extend({},$table.data(constants.staticRef.list)[index]);
+        var data = $table.bootstrapTable('getSelections');
+        data = data[0];
         X.confirm(function(){
            X.ajax({'weekreport.report_id':data.report_id},function(data){
               if(data.success){
-                  getWeekreportList();
+                  $('#weekreportTable').bootstrapTable('refresh');
                   $('#confirmModal').modal('hide');
               }
            },'weekreport/delete');
@@ -102,36 +126,7 @@
             }
         },'weekreport/overWork');
     }
-    //获取列表
-    function getWeekreportList(){
-        var mom = moment();
-        var day = mom.day();
-        if(day == 0){
-            mom = mom.add('w',-1);
-        }
-        var beginDate = mom.day(1).format('YYYY-MM-DD');
-        X.ajax({beginDate : beginDate},function(data){
-            X.loadTableData('#weekreportTable',data,function(){
-                var $table = $('#weekreportTable');
-                var $tbody = $table.find('tbody');
-                $tbody.find('tr').find('td:first').each(function(){
-                   var text = $(this).text();
-                   $(this).empty().append('<label><input title="'+text+'" type="checkbox" />'+text+'</label>');
-                });
-                $table.find('thead').find('tr').find('th:first').find('input:checkbox').click(function(){
-                    $tbody.find('tr').find('td:first').find('input:checkbox').prop('checked',$(this).prop('checked'));
-                });
-                var $tds = $tbody.find('tr').find('td:first');
-                $tds.find('input:checkbox').click(function(){
-                    var $td = $(this);
-                    $tds.find('input:checkbox:checked').each(function(){
-                       if(!$td.is($(this))){
-                           $(this).prop('checked',!$td.prop('checked'));
-                       }
-                    });
-                    $table.find('thead').find('tr').find('th:first').find('input:checkbox').prop('checked',$td.prop('checked'));
-                });
-            });
-        },'weekreport/list');
+    function weekreportChooseToday(){
+        weekreportForm.find('select[name="week"]').find('option[value="'+new Date().getDay()+'"]').prop('selected',true);
     }
 </script>

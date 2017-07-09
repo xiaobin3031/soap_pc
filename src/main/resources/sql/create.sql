@@ -27,6 +27,22 @@ COMMENT ON COLUMN soap_users.office_time is '任职时间';
 COMMENT ON COLUMN soap_users.leave_time is '离职时间';
 COMMENT ON COLUMN soap_users.practice_over_time is '实习结束时间';
 
+--用户属性表
+create table soap_user_attr(
+  user_id varchar2(32) not null,
+  attr_type varchar2(50) not null,
+  attr_id varchar2(50) not null,
+  attr_value varchar2(100) not null,
+  attr_desc varchar2(100),
+  CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES soap_users(user_id),
+  CONSTRAINT pk_user_attr PRIMARY KEY (user_id,attr_type,attr_id)
+);
+COMMENT ON TABLE soap_user_attr is '用户属性表';
+COMMENT ON COLUMN soap_user_attr.user_id is '用户ID';
+COMMENT ON COLUMN soap_user_attr.attr_type is '属性类型';
+COMMENT ON COLUMN soap_user_attr.attr_id is '属性ID';
+COMMENT ON COLUMN soap_user_attr.attr_value is '属性值';
+COMMENT ON COLUMN soap_user_attr.attr_desc is '属性描述';
 --菜单表
 create table soap_product(
   prod_id varchar2(32) primary key,
