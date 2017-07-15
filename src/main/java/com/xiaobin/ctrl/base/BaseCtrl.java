@@ -21,4 +21,12 @@ public class BaseCtrl extends Controller{
         model.setCode(0);
         return model;
     }
+
+    protected ReturnModel getSuccessModel(){
+        ReturnModel model = new ReturnModel();
+        model.setSuccess(true);
+        model.setMessage("");
+        model.setCode(0);
+        return model;
+    }
 }
