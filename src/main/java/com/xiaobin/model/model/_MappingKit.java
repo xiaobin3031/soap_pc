@@ -20,6 +20,7 @@ public class _MappingKit {
 		arp.addMapping("SOAP_USERS", "USER_ID", Users.class);
 		// Composite Primary Key order: ATTR_ID,ATTR_TYPE,USER_ID
 		arp.addMapping("SOAP_USER_ATTR", "ATTR_ID,ATTR_TYPE,USER_ID", UserAttr.class);
+		arp.addMapping("SOAP_USER_OPERATE", "OPERATE_ID", UserOperate.class);
 		arp.addMapping("SOAP_WEEKREPORT", "REPORT_ID", Weekreport.class);
 		arp.addMapping("SOAP_WEEKREPORT_OVERTIME", "WORK_TIME", WeekreportOvertime.class);
 	}

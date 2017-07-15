@@ -1,0 +1,61 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <form id="userStatusForm" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="control-label col-sm-2">操作</label>
+                    <div class="col-sm-4">
+                        <select title="操作" name="userOperate.operate" class="form-control" onchange="changeUserStatus()"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">时间1</label>
+                    <div class="col-sm-4">
+                        <input title="time2" name="userOperate.time1" class="form-control" />
+                    </div>
+                    <label class="control-label col-sm-2">时间2</label>
+                    <div class="col-sm-4">
+                        <input title="time2" name="userOperate.time2" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">备注</label>
+                    <div class="col-sm-10">
+                        <textarea title="notes" rows="5" class="form-control" name="userOperate.notes"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-6">
+                    <button type="button" class="btn btn-success" onclick="$('#userStatusForm').submit()">保存</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-default btn-close" onclick="X.closeForm('#userStatusForm','#userStatusModal')">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var $userStatusForm = $('#userStatusForm');
+    $userStatusForm.find('select[name="userOperate.operate"]').append(X.selectFromConst(constants.userOperate,true));
+    $userStatusForm.validate({
+       submitHandler : function(form){
+           var data = $('#userTable').bootstrapTable('getSelections')[0];
+           X.ajax($(form).serialize() + "&userOperate.user_id=" + data.user_id,function(data){
+               if(data.success){
+                   $('#userTable').bootstrapTable("refresh");
+                   $('#userStatusModal').modal('hide');
+               }
+           },'users/userStatus');
+       }
+    });
+    function changeUserStatus(){
+
+    }
+</script>

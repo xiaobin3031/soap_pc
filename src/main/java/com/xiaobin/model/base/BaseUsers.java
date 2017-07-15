@@ -105,4 +105,20 @@ public abstract class BaseUsers<M extends BaseUsers<M>> extends Model<M> impleme
 		return get("practice_over_time");
 	}
 
+	public void setDuty(java.lang.String duty) {
+		set("duty", duty);
+	}
+
+	public java.lang.String getDuty() {
+		return get("duty");
+	}
+
+	public void setIsTrip(java.lang.String isTrip) {
+		set("is_trip", isTrip);
+	}
+
+	public java.lang.String getIsTrip() {
+		return get("is_trip");
+	}
+
 }

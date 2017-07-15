@@ -17,4 +17,18 @@ public class Users extends BaseUsers<Users> {
 		Prop p = Util.getProp("dao/sys/users");
 		return find(p.get("query"));
 	}
+
+	public List<Users> queryCurrent(Users users){
+		Prop p = Util.getProp("dao/sys/users");
+		String select = p.get("query");
+		select += " and status < 80";
+		return find(select);
+	}
+
+	public List<Users> queryHis(Users users){
+		Prop p = Util.getProp("dao/sys/users");
+		String select = p.get("query");
+		select += "and status >= 80";
+		return find(select);
+	}
 }

@@ -26,6 +26,27 @@ COMMENT ON COLUMN soap_users.update_time is '更新日期';
 COMMENT ON COLUMN soap_users.office_time is '任职时间';
 COMMENT ON COLUMN soap_users.leave_time is '离职时间';
 COMMENT ON COLUMN soap_users.practice_over_time is '实习结束时间';
+--操作用户流水表
+create table soap_user_operate(
+  operate_id varchar2(32) PRIMARY KEY,
+  user_id varchar2(32) not null,
+  operate char(2) not null,
+  time1 varchar2(20),
+  time2 varchar2(20),
+  notes varchar2(500),
+  create_user varchar2(32) not null,
+  create_time TIMESTAMP default sysdate,
+  CONSTRAINT pk_item_user_id FOREIGN KEY (user_id) REFERENCES soap_users(user_id)
+);
+COMMENT ON TABLE soap_user_operate is '用户状态流水表';
+COMMENT ON COLUMN soap_user_operate.operate_id is '操作ID';
+COMMENT ON COLUMN soap_user_operate.user_id is '用户ID';
+COMMENT ON COLUMN soap_user_operate.operate is '状态';
+COMMENT ON COLUMN soap_user_operate.time1 is '时间1';
+COMMENT ON COLUMN soap_user_operate.time2 is '时间2';
+COMMENT ON COLUMN soap_user_operate.notes is '备注';
+COMMENT ON COLUMN soap_user_operate.create_user is '修改人';
+COMMENT ON COLUMN soap_user_operate.create_time is '修改时间';
 
 --用户属性表
 create table soap_user_attr(

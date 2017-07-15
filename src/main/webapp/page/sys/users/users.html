@@ -1,21 +1,33 @@
-<div class="contentwrapper">
-    <ul class="buttonlist">
-        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#userAddModal">新增</button></li>
-        <li><button class="stdbtn btn_blue" type="button" onclick="modifyUsers()">修改</button></li>
-        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#userLeaveModal">请假</button></li>
+<div class="pageheader">
+    <ul class="hornav">
+        <li class="current"><a href="#userCurrent">当前</a></li>
+        <li><a href="#userHis">历史</a></li>
     </ul>
-    <table id="userTable" data-pagination="true">
-    </table>
+</div>
+<div class="contentwrapper">
+    <div id="userCurrent" class="subcontent">
+        <ul class="buttonlist">
+            <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#userAddModal">新增</button></li>
+            <li><button class="stdbtn btn_blue" type="button" onclick="modifyUsers()">修改</button></li>
+            <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#userStatusModal">修改状态</button></li>
+        </ul>
+        <table id="userTable" data-pagination="true">
+        </table>
+    </div>
+    <div id="userHis" class="subcontent" style="display:none;">
+        <table id="userHisTable" data-pagination="true">
+        </table>
+    </div>
 </div>
 <div class="modal fade" id="userAddModal" tabindex="-1" role="dialog" data-backdrop="false"></div>
-<div class="modal fade" id="userLeaveModal" tabindex="-1" role="dialog" data-backdrop="false"></div>
+<div class="modal fade" id="userStatusModal" tabindex="-1" role="dialog" data-backdrop="false"></div>
 <script src="/page/sys/users/user.js"></script>
 <script>
     $('#userAddModal').load('/page/sys/users/add.html');
-    $('#userLeaveModal').load('/page/sys/users/userLeave.html');
+    $('#userStatusModal').load('/page/sys/users/userStatus.html');
 
-    $('#userTable').bootstrapTable({
-        url : 'users/list',
+    var fields = {
+        url : 'users/queryCurrent',
         singleSelect : true,
         clickToSelect : true,
         columns : [{
@@ -37,8 +49,16 @@
             formatter : function(v){
                 return constants.userStatus[v] || v;
             }
+        },{
+            field : 'duty',
+            title : '职务',
+            formatter : function(v){
+                return constants.duties[v] || v;
+            }
         }]
-    });
+    };
+    $('#userTable').bootstrapTable(fields);
+    $('#userHisTable').bootstrapTable($.extend(fields,{url : 'users/queryHis'}));
 
     function modifyUsers(){
         var $table = $('#userTable');

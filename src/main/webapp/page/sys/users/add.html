@@ -17,30 +17,19 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-2 control-label">状态</div>
-                    <div class="col-sm-4">
-                        <select disabled title="status" class="form-control" name="users.status"></select>
-                    </div>
-
                     <div class="col-sm-2 control-label">手机号</div>
                     <div class="col-sm-4">
                         <input title="mobile" class="form-control" name="users.mobile" />
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-2 control-label">入职时间</div>
+                    <div class="col-sm-2 control-label">职务</div>
                     <div class="col-sm-4">
-                        <input class="form-control" title="office_time" name="users.office_time"/>
-                    </div>
-                    <div class="col-sm-2 control-label">转正时间</div>
-                    <div class="col-sm-4">
-                        <input title="practice_over_time" class="form-control" name="users.practice_over_time"/>
+                        <select title="duty" class="form-control" name="users.duty"></select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-2 control-label">离职时间</div>
+                    <div class="col-sm-2 control-label">接受出差</div>
                     <div class="col-sm-4">
-                        <input title="leave_time" name="users.leave_time" class="form-control" />
+                        <select title="is_trip" class="form-control" name="users.is_trip"></select>
                     </div>
                 </div>
             </form>
@@ -58,8 +47,8 @@
     </div>
 </div>
 <script>
-    var userForm = $('#userForm');
-    userForm.validate({
+    var $userForm = $('#userForm');
+    $userForm.validate({
        submitHandler : function(form){
            X.ajax($(form).serialize(),function(data){
                 if(data.success){
@@ -69,5 +58,7 @@
            },'users/save');
        }
     });
-    userForm.find('select[name="users.status"]').empty().append(X.selectFromConst(constants.userStatus));
+    $userForm.find('select[name="users.status"]').empty().append(X.selectFromConst(constants.userStatus));
+    $userForm.find('select[name="users.duty"]').empty().append(X.selectFromConst(constants.duties));
+    $userForm.find('select[name="users.is_trip"]').empty().append(X.selectFromConst(constants.isCommon));
 </script>

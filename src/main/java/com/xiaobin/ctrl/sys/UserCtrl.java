@@ -4,6 +4,7 @@ import com.jfinal.aop.Duang;
 import com.xiaobin.ctrl.base.BaseCtrl;
 import com.xiaobin.model.ReturnModel;
 import com.xiaobin.model.model.UserAttr;
+import com.xiaobin.model.model.UserOperate;
 import com.xiaobin.model.model.Users;
 import com.xiaobin.service.sys.UsersService;
 import com.xiaobin.util.Util;
@@ -20,6 +21,20 @@ public class UserCtrl extends BaseCtrl{
         Users users = getModel(Users.class);
         UsersService usersService = Duang.duang(UsersService.class);
         List<Users> list = usersService.query(users);
+        renderJson(list);
+    }
+
+    public void queryCurrent(){
+        Users users = getModel(Users.class);
+        UsersService usersService = Duang.duang(UsersService.class);
+        List<Users> list = usersService.queryCurrent(users);
+        renderJson(list);
+    }
+
+    public void queryHis(){
+        Users users = getModel(Users.class);
+        UsersService usersService = Duang.duang(UsersService.class);
+        List<Users> list = usersService.queryHis(users);
         renderJson(list);
     }
 
@@ -51,5 +66,15 @@ public class UserCtrl extends BaseCtrl{
         ReturnModel model = getReturnModel();
         usersService.userLeave(userAttr,model);
         renderJson(model);
+    }
+
+    public void userStatus(){
+        UserOperate operate = getModel(UserOperate.class);
+        operate.setOperateId(Util.uuid());
+        operate.setCreateUser(getUserId());
+        operate.setCreateTime(Util.currentTimeStamp());
+        UsersService usersService = Duang.duang(UsersService.class);
+        usersService.userStatus(operate);
+        renderJson(getSuccessModel());
     }
 }
