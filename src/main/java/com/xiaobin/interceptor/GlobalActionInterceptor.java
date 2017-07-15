@@ -25,7 +25,7 @@ public class GlobalActionInterceptor implements Interceptor{
         } catch(Exception e){
             e.printStackTrace();
             ReturnModel model = new ReturnModel();
-            model.setCode(0);
+            model.setCode(-1);
             model.setSuccess(false);
             model.setMessage(e.getMessage());
             ctrl.renderJson(model);
