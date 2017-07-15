@@ -122,8 +122,11 @@ var X = {
     tab:function(purl,url){
         $('#mainContent').load('page/' + purl + '/' + url + '/' + url + '.html');
     },
-    selectFromConst : function(oConst){
+    selectFromConst : function(oConst,initSelect){
         var t = new Txt();
+        if(initSelect){
+            t._('<option value="">请选择</option>');
+        }
         for(var x in oConst){
             t._('<option value="')
                 ._(x)
