@@ -1,0 +1,51 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">查询</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" id="projectUsersSearchForm">
+                <div class="form-group">
+                    <div class="control-label col-sm-2">项目</div>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="projectUsers.project_id" title="project_id"></select>
+                    </div>
+                    <div class="control-label col-sm-2">功能</div>
+                    <div class="col-sm-4">
+                        <input title="function_id" name="projectUsers.function_id" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label col-sm-2">开发员</div>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="projectUsers.user_id" title="user_id"></select>
+                    </div>
+                    <div class="control-label col-sm-2">状态</div>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="projectUsers.status" title="status"></select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+<script>
+    var $projectUsersSearchModal = $('#projectUsersSearchModal');
+    $projectUsersSearchModal.find('div.modal-footer').load('/page/common/searchFooter.html');
+    $projectUsersSearchModal.find('select[name="projectUsers.status"]').empty().append(X.selectFromConst(constants.userStatus));
+
+    $('#projectUsersSearchForm').validate({
+        submitHandler : function(form){
+            var ser = $(form).serialize();
+            ser = ser.split('&');
+            var data = {};
+            for(var i in ser){
+                var arr = ser[i].split('=');
+                data[arr[0]] = arr[1];
+            }
+            $('#projectUsersTable').bootstrapTable('refresh',{query : data});
+            $projectUsersSearchModal.modal('hide');
+        }
+    });
+</script>

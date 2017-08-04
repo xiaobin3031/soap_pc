@@ -1,0 +1,49 @@
+<div class="contentwrapper">
+    <ul class="buttonlist">
+        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectInfoAddModal">新增</button></li>
+        <li><button class="stdbtn btn_blue" type="button" onclick="modifyProjectInfo()">修改</button></li>
+    </ul>
+    <table id="projectInfoTable" data-pagination="true"></table>
+</div>
+<div id="projectInfoAddModal" class="modal fade" role="dialog" tabindex="-1" data-backdrop="false"></div>
+<script>
+    $('#projectInfoAddModal').load('/page/projectManage/projectInfo/add.html');
+    $('#projectInfoTable').bootstrapTable({
+       url : 'projectInfo/list',
+        singleSelect : true,
+        clickToSelect : true,
+        columns : [{
+           field : '',
+            title : '',
+            checkbox : true
+        },{
+           field : 'project_name',
+            title : '项目名称'
+        },{
+           field : 'parent_project_name',
+            title : '母项目'
+        },{
+           field : 'develop_company_name',
+            title : '开发公司'
+        },{
+           field : 'customer_name',
+            title : '客户'
+        },{
+           field : 'start_time',
+            title : '开始时间'
+        },{
+           field : 'end_time',
+            title : '结束时间'
+        }]
+    });
+
+    function modifyProjectInfo(){
+        var $table = $('#projectInfoTable');
+        var data = $table.bootstrapTable('getSelections');
+        if(data.length == 0){
+            X.dialog('请选择一条数据');
+            return;
+        }
+        X.putDataIntoForm('#projectInfoAddForm',data[0],'#projectInfoAddModal');
+    }
+</script>

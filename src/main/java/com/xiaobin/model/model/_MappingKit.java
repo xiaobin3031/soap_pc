@@ -16,7 +16,12 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 public class _MappingKit {
 
 	public static void mapping(ActiveRecordPlugin arp) {
+		arp.addMapping("SOAP_COMPANY", "COMPANY_ID", Company.class);
 		arp.addMapping("SOAP_PRODUCT", "PROD_ID", Product.class);
+		arp.addMapping("SOAP_PROJECT_FUNCTIONS", "FUNCTION_ID", ProjectFunctions.class);
+		arp.addMapping("SOAP_PROJECT_INFO", "PROJECT_ID", ProjectInfo.class);
+		// Composite Primary Key order: FUNCTION_ID,PROJECT_ID,STATUS,USER_ID
+		arp.addMapping("SOAP_PROJECT_USERS", "FUNCTION_ID,PROJECT_ID,STATUS,USER_ID", ProjectUsers.class);
 		arp.addMapping("SOAP_USERS", "USER_ID", Users.class);
 		// Composite Primary Key order: ATTR_ID,ATTR_TYPE,USER_ID
 		arp.addMapping("SOAP_USER_ATTR", "ATTR_ID,ATTR_TYPE,USER_ID", UserAttr.class);

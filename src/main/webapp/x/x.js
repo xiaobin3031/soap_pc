@@ -14,43 +14,8 @@ var X = {
         };
         $.ajax(s);
     },
-    dialog:function(){
-        var json = {};
-        if(arguments.length == 1){
-            json = arguments[0];
-        }else if(arguments.length == 2){
-            json.success = arguments[0];
-            json.msg = arguments[1];
-        }
-        X.clearTimeOutAndInterval();
-        switch(json.code){
-            case 200:
-                X.hideDialog();
-                X.showLoginDialog();
-                break;
-            default:
-                json.msg = '<span style="color:' + (json.success ? '' : 'red') + '">' + (json.msg || (json.success ? '操作成功' : '操作失败')) + '</span>';
-                var dialog = $('#operationDialog'),div = $('#operationDiv');
-                dialog.dialog({content:json.msg});
-                var bottom = div.css('bottom');
-                div.stop().animate({bottom:'0px'},800,function(){
-                    X.option.timeOut = setTimeout(function(){
-                        if(X.option.timeOut != undefined){
-                            $('#operationDiv').animate({bottom:bottom},2000);
-                            X.clearTimeOutAndInterval();
-                        }
-                    },json.success ? 2000 : 5000);
-                    dialog.off("mouseover mouseout");
-                    dialog.on({
-                        mouseover:function(){
-                            X.holdDialog();
-                        },
-                        mouseout:function(){
-                            X.hideDialog();
-                        }
-                    });
-                });
-        }
+    dialog:function(msg){
+        alert(msg);
     },
     clearTimeOutAndInterval:function(t, i){
         if(t == undefined){
@@ -137,13 +102,22 @@ var X = {
         return t.toString();
     },
     closeForm : function(form,modal,callback){
-        var $form = $(form);
+        var $form;
+        if(typeof form == jQuery){
+            $form = form;
+        }else{
+            $form = $(form);
+        }
         $form[0].reset();
         var $input = $form.find('input:hidden');
         if($input.length > 0){
             $input.val('');
         }
-        $(modal).modal('hide');
+        if(typeof modal == jQuery){
+            modal.modal('hide');
+        }else{
+            $(modal).modal('hide');
+        }
         if(callback){
             callback();
         }

@@ -12,6 +12,10 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.template.Engine;
 import com.xiaobin.ctrl.IndexCtrl;
 import com.xiaobin.ctrl.ProductCtrl;
+import com.xiaobin.ctrl.baseInfo.CompanyCtrl;
+import com.xiaobin.ctrl.projectManage.ProjectFunctionsCtrl;
+import com.xiaobin.ctrl.projectManage.ProjectInfoCtrl;
+import com.xiaobin.ctrl.projectManage.ProjectUsersCtrl;
 import com.xiaobin.ctrl.sys.UserCtrl;
 import com.xiaobin.ctrl.workspace.WeekReportCtrl;
 import com.xiaobin.interceptor.GlobalActionInterceptor;
@@ -37,6 +41,14 @@ public class MainConfig extends JFinalConfig{
         routes.add("/weekreport", WeekReportCtrl.class);
         //人员
         routes.add("/users", UserCtrl.class);
+        //公司
+        routes.add("/company", CompanyCtrl.class);
+        //项目信息
+        routes.add("/projectInfo", ProjectInfoCtrl.class);
+        //项目功能
+        routes.add("/projectFunctions", ProjectFunctionsCtrl.class);
+        //项目人员
+        routes.add("/projectUsers", ProjectUsersCtrl.class);
     }
 
     public void configEngine(Engine engine) {

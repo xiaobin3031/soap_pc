@@ -1,0 +1,52 @@
+<div class="contentwrapper">
+    <ul class="buttonlist">
+        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectFunctionsSearchModal">查询</button></li>
+        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectFunctionsAddModal">新增</button></li>
+        <li><button class="stdbtn btn_blue" type="button" onclick="modifyProjectFunctions()">修改</button></li>
+    </ul>
+    <table id="projectFunctionsTable" data-pagination="true"></table>
+</div>
+<div class="modal fade" id="projectFunctionsAddModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
+<div class="modal fade" id="projectFunctionsSearchModal" role="dialog" tabindex="-1"></div>
+<script>
+    $('#projectFunctionsAddModal').load('/page/projectManage/projectFunctions/add.html');
+    $('#projectFunctionsSearchModal').load('/page/projectManage/projectFunctions/search.html');
+    $('#projectFunctionsTable').bootstrapTable({
+       url : 'projectFunctions/list',
+        singleSelect : true,
+        clickToSelect : true,
+        columns : [{
+            field : '',
+            title : '',
+            checkbox : true
+        },{
+           field : 'function_name',
+            title : '功能名称'
+        },{
+           field : 'parent_function_name',
+            title : '父功能'
+        },{
+           field : 'project_name',
+            title : '项目名称'
+        },{
+           field : 'type',
+            title : '类型'
+        },{
+           field : 'status',
+            title : '状态',
+            formatter : function(v){
+               return constants.projectFunctionsStatus[v] || v;
+            }
+        }]
+    });
+
+    function modifyProjectFunctions(){
+        var $table = $('#projectFunctionsTable');
+        var data = $table.bootstrapTable('getSelections');
+        if(data.length == 0){
+            X.dialog('请选择一条数据');
+            return;
+        }
+        X.putDataIntoForm('#projectFunctionsAddForm',data[0],'#projectFunctionsAddModal');
+    }
+</script>

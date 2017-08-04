@@ -1,0 +1,103 @@
+<div class="modal-dialog" style="width:70%;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <form id="projectInfoAddForm" class="form-horizontal" role="form">
+                <input type="hidden" name="projectInfo.project_id" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">项目名称</div>
+                    <div class="col-sm-4">
+                        <input required title="project_name" name="projectInfo.project_name" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 control-label">母项目</div>
+                    <div class="col-sm-4">
+                        <select title="parent_id" name="projectInfo.parent_id" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">开发公司</div>
+                    <div class="col-sm-4">
+                        <select required title="develop_company" name="projectInfo.develop_company" class="form-control"></select>
+                    </div>
+                    <div class="col-sm-2 control-label">客户</div>
+                    <div class="col-sm-4">
+                        <select title="customer" name="projectInfo.customer" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">预计开始时间</div>
+                    <div class="col-sm-4">
+                        <input date required title="expect_start_time" name="projectInfo.expect_start_time" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 control-label">预计结束时间</div>
+                    <div class="col-sm-4">
+                        <input required title="expect_end_time" name="projectInfo.expect_end_time" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">开始时间</div>
+                    <div class="col-sm-4">
+                        <input title="start_time" name="projectInfo.start_time" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 control-label">结束时间</div>
+                    <div class="col-sm-4">
+                        <input title="end_time" name="projectInfo.end_time" class="form-control" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-6">
+                    <button type="button" class="btn btn-success" onclick="$('#projectInfoAddForm').submit()">保存</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-default btn-close" onclick="X.closeForm('#projectInfoAddForm','#projectInfoAddModal')">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#projectInfoAddForm').validate({
+       submitHandler : function(form){
+           X.ajax($(form).serialize(),function(data){
+                if(data.success){
+                    $('#projectInfoTable').bootstrapTable('refresh');
+                    $('#projectInfoAddModal').modal('hide');
+                    getParentProject();
+                }
+           },'projectInfo/save');
+       }
+    });
+    //获取公司
+    X.ajax({},function(data){
+        if(data && data.length){
+            var t = new Txt();
+            for(var i in data){
+                t._('<option value="'+data[i].company_id+'">'+data[i].company_name+'</option>');
+            }
+            var $form = $('#projectInfoAddForm');
+            $form.find('select[name="projectInfo.develop_company"]').empty().append(t.toString());
+            $form.find('select[name="projectInfo.customer"]').empty().append('<option value="">请选择</option>' + t.toString());
+        }
+    },'company/list');
+
+    //获取项目
+    function getParentProject(){
+        X.ajax({},function(data){
+            if(data && data.length){
+                var t = new Txt();
+                for(var i in data){
+                    t._('<option value="'+data[i].project_id+'">'+data[i].project_name+'</option>');
+                }
+                var $form = $('#projectInfoAddForm');
+                $form.find('select[name="projectInfo.parent_id"]').empty().append('<option value="">请选择</option>' + t.toString());
+            }
+        },'projectInfo/list');
+    }
+
+    getParentProject();
+</script>

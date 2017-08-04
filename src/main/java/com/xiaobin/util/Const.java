@@ -8,4 +8,5 @@ public class Const {
 
     public static final String LOGIN_ID = "_user_id";
     public static final String LOGIN_NAME = "_user_name";
+    public static final int batchSize = 100;
 }

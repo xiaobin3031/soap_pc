@@ -120,3 +120,93 @@ create table soap_weekreport_overtime(
 COMMENT ON TABLE soap_weekreport_overtime is '周报加班时间';
 COMMENT ON COLUMN soap_weekreport_overtime.over_time_begin is '加班开始时间';
 COMMENT ON COLUMN soap_weekreport_overtime.over_time_end is '加班结束时间';
+
+--公司列表
+create table soap_company(
+  company_id varchar2(32) PRIMARY KEY ,
+  company_name varchar2(200) not null,
+  industry char(2) not null,
+  address varchar2(200),
+  fax varchar2(50),
+  email varchar2(100),
+  notes varchar2(1000),
+  create_user varchar2(32) not null,
+  create_time TIMESTAMP default sysdate,
+  update_user varchar2(32),
+  update_time TIMESTAMP
+);
+COMMENT ON TABLE soap_company is '公司列表';
+COMMENT ON COLUMN soap_company.company_id is '公司ID';
+COMMENT ON COLUMN soap_company.company_name is '公司名称';
+COMMENT ON COLUMN soap_company.industry is '行业';
+COMMENT ON COLUMN soap_company.address is '地址';
+COMMENT ON COLUMN soap_company.fax is '传真';
+COMMENT ON COLUMN soap_company.email is '邮件';
+COMMENT ON COLUMN soap_company.notes is '备注';
+--项目信息
+create table soap_project_info(
+  project_id varchar2(32) PRIMARY KEY ,
+  parent_id varchar2(32),
+  project_name varchar2(200) not null,
+  develop_company varchar2(32) not null,
+  customer varchar2(32),
+  expect_start_time TIMESTAMP not null,
+  start_time TIMESTAMP,
+  expect_end_time TIMESTAMP not null,
+  end_time TIMESTAMP,
+  create_user varchar2(32) not null,
+  create_time TIMESTAMP default sysdate,
+  update_user varchar2(32),
+  update_time TIMESTAMP
+);
+COMMENT ON TABLE soap_project_info is '项目信息';
+COMMENT ON COLUMN soap_project_info.project_id is '项目ID';
+COMMENT ON COLUMN soap_project_info.parent_id is '母项目';
+COMMENT ON COLUMN soap_project_info.project_name is '项目名称';
+COMMENT ON COLUMN soap_project_info.develop_company is '开发公司';
+COMMENT ON COLUMN soap_project_info.customer is '客户';
+COMMENT ON COLUMN soap_project_info.expect_start_time is '预计开始时间';
+COMMENT ON COLUMN soap_project_info.start_time is '开始时间';
+COMMENT ON COLUMN soap_project_info.expect_end_time is '预计结束时间';
+COMMENT ON COLUMN soap_project_info.end_time is '结束时间';
+
+--项目功能
+create table soap_project_functions(
+  function_id varchar2(32) PRIMARY KEY ,
+  project_id varchar2(32) not null,
+  parent_id varchar2(32),
+  function_name varchar2(100) not null,
+  status char(2) default '00',
+  type char(2),
+  create_user varchar2(32) not null,
+  create_time TIMESTAMP default sysdate,
+  update_user varchar2(32),
+  update_time TIMESTAMP,
+  CONSTRAINT pk_functions_project_id FOREIGN KEY (project_id) REFERENCES soap_project_info(project_id)
+);
+COMMENT ON TABLE soap_project_functions is '项目功能';
+COMMENT ON COLUMN soap_project_functions.function_id is '功能ID';
+COMMENT ON COLUMN soap_project_functions.project_id is '项目ID';
+COMMENT ON COLUMN soap_project_functions.parent_id is '父功能ID';
+COMMENT ON COLUMN soap_project_functions.function_name is '功能名称';
+COMMENT ON COLUMN soap_project_functions.status is '状态';
+COMMENT ON COLUMN soap_project_functions.type is '类型';
+--项目人员
+create table soap_project_users(
+  project_id varchar2(32) not null,
+  function_id varchar2(32) not null,
+  user_id varchar2(32) not null,
+  status char(2) default '00',
+  duty char(2) not null,
+  create_user varchar2(32) not null,
+  create_time TIMESTAMP default sysdate,
+  update_user varchar2(32),
+  update_time TIMESTAMP,
+  CONSTRAINT fk_pro_func_user_stat PRIMARY KEY (project_id,function_id,user_id)
+);
+COMMENT ON TABLE soap_project_users is '项目人员';
+COMMENT ON COLUMN soap_project_users.project_id is '项目ID';
+COMMENT ON COLUMN soap_project_users.function_id is '功能ID';
+COMMENT ON COLUMN soap_project_users.user_id is '人员ID';
+COMMENT ON COLUMN soap_project_users.status is '状态';
+COMMENT ON COLUMN soap_project_users.duty is '职务';

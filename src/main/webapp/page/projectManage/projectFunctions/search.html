@@ -1,0 +1,44 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">查询</h4>
+        </div>
+        <div class="modal-body">
+            <form id="projectFunctionsSearchForm" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="control-label col-sm-2">项目</div>
+                    <div class="col-sm-4">
+                        <select title="project_id" name="projectFunctions.project_id" class="form-control"></select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-6">
+                    <button type="button" class="btn btn-success" onclick="$(this).closest('div.modal-content').find('form').submit()">查询</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-default btn-close" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#projectFunctionsSearchForm').validate({
+       submitHandler : function(form){
+           var ser = $(form).serialize();
+           var data = {};
+           ser = ser.split('&');
+           for(var i in ser){
+               if(ser[i]){
+                   var arr = ser[i].split('=');
+                   data[arr[0]] = arr[1];
+               }
+           }
+           $('#projectFunctionsTable').bootstrapTable('refresh',{query : data});
+           $('#projectFunctionsSearchModal').modal('hide');
+       }
+    });
+</script>

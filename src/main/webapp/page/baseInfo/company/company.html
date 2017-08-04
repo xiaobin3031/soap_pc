@@ -1,0 +1,52 @@
+<div class="contentwrapper">
+    <ul class="buttonlist">
+        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#companyAddModal">新增</button></li>
+        <li><button class="stdbtn btn_blue" type="button" onclick="modifyCompany()">修改</button></li>
+    </ul>
+    <table id="companyTable" data-pagination="true"></table>
+</div>
+<div class="modal fade" id="companyAddModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
+<script>
+    $('#companyAddModal').load('/page/baseInfo/company/add.html');
+    $('#companyTable').bootstrapTable({
+        url : 'company/list',
+        singleSelect : true,
+        clickToSelect : true,
+        columns : [{
+            field : '',
+            title : '',
+            checkbox : true
+        },{
+            field : 'company_name',
+            title : '公司名称'
+        },{
+            field : 'industry',
+            title : '行业',
+            formatter : function(v){
+                return constants.industry[v] || v;
+            }
+        },{
+            field : 'address',
+            title : '地址'
+        },{
+            field : 'fax',
+            title : '传真'
+        },{
+            field : 'email',
+            title : '邮箱'
+        },{
+            field : 'notes',
+            title : '备注'
+        }]
+    });
+
+    function modifyCompany(){
+        var $table = $('#companyTable');
+        var data = $table.bootstrapTable('getSelections');
+        if(!data.length){
+            return;
+        }
+        data = data[0];
+        X.putDataIntoForm('#companyAddForm',data,'#companyAddModal');
+    }
+</script>

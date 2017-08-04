@@ -1,0 +1,69 @@
+<div class="contentwrapper">
+    <ul class="buttonlist">
+        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectUsersSearchModal">查询</button></li>
+        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectUsersAddModal">新增</button></li>
+    </ul>
+    <table id="projectUsersTable" data-pagination="true"></table>
+</div>
+<div class="modal fade" id="projectUsersSearchModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
+<div class="modal fade" id="projectUsersAddModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
+<script>
+    $('#projectUsersSearchModal').load('/page/projectManage/projectUsers/search.html');
+    $('#projectUsersAddModal').load('/page/projectManage/projectUsers/add.html');
+
+    X.ajax({},function(data){
+        var $userSelect = $('select[name="projectUsers.user_id"]');
+        $userSelect.empty();
+        if(data && data.length){
+            var t = new Txt();
+            for(var i in data){
+                t._('<option value="'+data[i].user_id+'">'+data[i].name+'</option>');
+            }
+            $userSelect.append('<option value="">请选择</option>' + t.toString());
+        }
+    },'users/queryCurrent');
+
+    X.ajax({},function(data){
+        var $projectSelect = $('select[name="projectUsers.project_id"]');
+        $projectSelect.empty();
+        if(data && data.length){
+            var t = new Txt();
+            for(var i in data){
+                t._('<option value="'+data[i].project_id+'">'+data[i].project_name+'</option>');
+            }
+            $projectSelect.append('<option value="">请选择</option>' + t.toString());
+        }
+    },'projectInfo/list');
+
+    $('#projectUsersTable').bootstrapTable({
+       url : 'projectUsers/list',
+        singleSelect : true,
+        clickToSelect : true,
+        columns : [{
+           field : '',
+            title : '',
+            checkbox : true
+        },{
+           field : 'project_name',
+            title : '项目'
+        },{
+           field : 'function_name',
+            title : '功能'
+        },{
+           field : 'user_name',
+            title : '人员'
+        },{
+           field : 'duty',
+            title : '职务',
+            formatter : function(v){
+               return constants.duties[v] || v;
+            }
+        },{
+           field : 'status',
+            title : '状态',
+            formatter : function(v){
+               return constants.userStatus[v] || v;
+            }
+        }]
+    });
+</script>

@@ -1,0 +1,68 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <form id="companyAddForm" class="form-horizontal" role="form">
+                <input type="hidden" name="company.company_id" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">公司名称</div>
+                    <div class="col-sm-5">
+                        <input required title="company_name" name="company.company_name" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 control-label">行业</div>
+                    <div class="col-sm-3">
+                        <select title="industry" name="company.industry" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">地址</div>
+                    <div class="col-sm-10">
+                        <input title="address" name="company.address" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">传真</div>
+                    <div class="col-sm-4">
+                        <input title="fax" name="company.fax" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 control-label">邮箱</div>
+                    <div class="col-sm-4">
+                        <input title="email" name="company.email" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">备注</div>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" title="notes" name="company.notes" rows="3"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-6">
+                    <button type="button" class="btn btn-success" onclick="$('#companyAddForm').submit()">保存</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-default btn-close" onclick="X.closeForm('#companyAddForm','#companyAddModal')">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var $companyAddForm = $('#companyAddForm');
+    $('#companyAddForm').validate({
+        submitHandler : function(form){
+            X.ajax($(form).serialize(),function(data){
+                if(data.success){
+                    $('#companyTable').bootstrapTable('refresh');
+                    $('#companyAddModal').modal('hide');
+                }
+            },'company/save');
+        }
+    });
+    $companyAddForm.find('select[name="company.industry"]').empty().append(X.selectFromConst(constants.industry));
+</script>

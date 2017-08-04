@@ -1,0 +1,164 @@
+<div class="modal-dialog" style="width:70%;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-5">
+                    <form class="form-horizontal" id="projectUsersAddForm">
+                        <div class="form-group">
+                            <div class="control-label col-sm-3">项目</div>
+                            <div class="col-sm-7">
+                                <select class="form-control" name="projectUsers.project_id" title="project_id"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="control-label col-sm-3">开发员</div>
+                            <div class="col-sm-7">
+                                <select class="form-control" name="projectUsers.user_id" title="user_id"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="control-label col-sm-3">状态</div>
+                            <div class="col-sm-7">
+                                <select class="form-control" name="projectUsers.status" title="status"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="control-label col-sm-3">职务</div>
+                            <div class="col-sm-7">
+                                <select class="form-control" name="projectUsers.duty" title="duty"></select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <ul class="buttonlist">
+                            <li><button class="stdbtn btn_blue" type="button" onclick="loadFunctions()">加载功能</button></li>
+                        </ul>
+                    </div>
+                    <div id="projectUsersFunctionsTree"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+<script>
+    var $projectUsersAddModal = $('#projectUsersAddModal');
+    $projectUsersAddModal.find('div.modal-footer').load('/page/common/addFooter.html');
+    $projectUsersAddModal.find('select[name="projectUsers.status"]').empty().append(X.selectFromConst(constants.userStatus));
+    $projectUsersAddModal.find('select[name="projectUsers.duty"]').empty().append(X.selectFromConst(constants.duties));
+
+    $('#projectUsersAddForm').validate({
+       submitHandler : function(form){
+           var $tree = $('#projectUsersFunctionsTree');
+           var nodes = $tree.treeview('getChecked');
+           if(nodes.length == 0){
+               X.dialog('请选择至少一个功能');
+               return;
+           }
+           var functionIds = [];
+           for(var i in nodes){
+               functionIds.push(nodes[i].id);
+           }
+           var oData = $(form).serialize();
+           oData += '&functionIds[]=' + functionIds;
+           X.ajax(oData,function(data){
+                if(data.success){
+                    $('#projectUsersTable').bootstrapTable('refresh');
+                    $projectUsersAddModal.modal('hide');
+                }
+           },'projectUsers/save');
+       }
+    });
+
+    function loadFunctions(){
+        var oData = $('#projectUsersAddForm').serialize();
+        if(oData.indexOf('projectUsers.project_id=&') >= 0 || /.*projectUsers.project_id=$/.test(oData)){
+            X.dialog('请先选择一个项目');
+            return;
+        }
+        X.ajax(oData.replace('projectUsers.project_id','projectFunctions.project_id'),function(data){
+            $('#projectUsersFunctionsTree').treeview({
+                data : treeData(data),
+                showCheckbox : true,
+                onNodeChecked : nodeChecked,
+                onNodeUnchecked : nodeUnChecked
+            }).treeview('collapseAll');
+        },'projectFunctions/list');
+    }
+    function treeData(data){
+        var arr = [];
+        for(var i in data){
+            if(!data[i].parent_id){
+                var obj = {};
+                obj.id = data[i].function_id;
+                obj.text = data[i].function_name;
+                obj.nodes = [];
+                for(var j in data){
+                    if(obj.id == data[j].parent_id){
+                        var obj2 = {};
+                        obj2.id = data[j].function_id;
+                        obj2.text = data[j].function_name;
+                        obj2.nodes = [];
+                        for(var k in data){
+                            if(obj2.id == data[k].parent_id){
+                                var obj3 = {};
+                                obj3.id = data[k].function_id;
+                                obj3.text = data[j].function_name;
+                                obj2.nodes.push(obj3);
+                            }
+                        }
+                        if(obj2.nodes.length == 0){
+                            delete obj2.nodes;
+                        }
+                        obj.nodes.push(obj2);
+                    }
+                }
+                if(obj.nodes.length == 0){
+                    delete obj.nodes;
+                }
+                arr.push(obj);
+            }
+        }
+        return arr;
+    }
+
+    function nodeChecked(e,node){
+        var $tree = $(e.target);
+        if(node.nodes && node.nodes.length){
+            for(var i in node.nodes){
+                $tree.treeview('checkNode',node.nodes[i].nodeId);
+            }
+        }
+        var parentNode = $tree.treeview('getNode',node.parentId);
+        if(parentNode && parentNode.nodes && !parentNode.state.checked){
+            $tree.treeview('checkNode',[parentNode.nodeId,{silent : true}]);
+        }
+    }
+    function nodeUnChecked(e,node){
+        var $tree = $(e.target);
+        if(node.nodes){
+            for(var i in node.nodes){
+                if(node.nodes[i].state.checked){
+                    $tree.treeview('uncheckNode',node.nodes[i].nodeId);
+                }
+            }
+        }
+        if(node.parentId != undefined){
+            var parentNode = $tree.treeview('getNode',node.parentId);
+            console.log(parentNode);
+            if(parentNode){
+                for(var i in parentNode.nodes){
+                    if(parentNode.nodes[i].state.checked){
+                        return;
+                    }
+                }
+                $tree.treeview('uncheckNode',parentNode.nodeId);
+            }
+        }
+    }
+</script>
