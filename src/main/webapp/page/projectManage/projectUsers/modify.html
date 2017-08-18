@@ -1,0 +1,57 @@
+<div class="modal-dialog" style="width:70%;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" id="projectUsersModifyForm">
+                <input type="hidden" name="projectUsers.project_id" />
+                <input type="hidden" name="projectUsers.function_id" />
+                <div class="form-group">
+                    <div class="control-label col-sm-2">项目</div>
+                    <div class="col-sm-4">
+                        <input class="form-control" name="projectUsers.project_name" title="project_name" disabled/>
+                    </div>
+                    <div class="control-label col-sm-2">功能</div>
+                    <div class="col-sm-4">
+                        <input class="form-control" name="projectUsers.function_name" title="function_name" disabled/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label col-sm-2">开发员</div>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="projectUsers.user_id" title="user_id"></select>
+                    </div>
+                    <div class="control-label col-sm-2">状态</div>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="projectUsers.status" title="status"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label col-sm-2">职务</div>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="projectUsers.duty" title="duty"></select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+<script>
+    var $projectUsersModifyModal = $('#projectUsersModifyModal');
+    $projectUsersModifyModal.find('div.modal-footer').load('/page/common/addFooter.html');
+    $projectUsersModifyModal.find('select[name="projectUsers.status"]').empty().append(X.selectFromConst(constants.userStatus));
+    $projectUsersModifyModal.find('select[name="projectUsers.duty"]').empty().append(X.selectFromConst(constants.duties));
+
+    $('#projectUsersModifyForm').validate({
+        submitHandler : function(form){
+            X.ajax($(form).serialize(),function(data){
+                if(data.success){
+                    $('#projectUsersTable').bootstrapTable('refresh');
+                    $projectUsersModifyModal.modal('hide');
+                }
+            },'projectUsers/update');
+        }
+    });
+</script>

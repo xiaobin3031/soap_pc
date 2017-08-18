@@ -5,6 +5,7 @@ create table soap_users(
   status char(2) default '00',
   name varchar2(200),
   mobile varchar2(20),
+  password varchar2(32) not null,
   office_time TIMESTAMP,
   leave_time TIMESTAMP,
   practice_over_time TIMESTAMP,
@@ -26,6 +27,7 @@ COMMENT ON COLUMN soap_users.update_time is '更新日期';
 COMMENT ON COLUMN soap_users.office_time is '任职时间';
 COMMENT ON COLUMN soap_users.leave_time is '离职时间';
 COMMENT ON COLUMN soap_users.practice_over_time is '实习结束时间';
+COMMENT ON COLUMN soap_users.password is '密码';
 --操作用户流水表
 create table soap_user_operate(
   operate_id varchar2(32) PRIMARY KEY,
@@ -210,3 +212,47 @@ COMMENT ON COLUMN soap_project_users.function_id is '功能ID';
 COMMENT ON COLUMN soap_project_users.user_id is '人员ID';
 COMMENT ON COLUMN soap_project_users.status is '状态';
 COMMENT ON COLUMN soap_project_users.duty is '职务';
+
+create table soap_task(
+  task_id varchar2(32) primary key,
+  function_id varchar2(32),
+  parent_id varchar2(32),
+  status char(2) default '00',
+  title varchar2(100) not null,
+  task_info varchar2(1000) not null,
+  user_id varchar2(32),
+  create_user varchar2(32) not null,
+  create_time TIMESTAMP default sysdate,
+  update_user varchar2(32),
+  update_time TIMESTAMP,
+  complete_user varchar2(32),
+  complete_time TIMESTAMP
+);
+COMMENT ON TABLE soap_task is '任务';
+COMMENT ON COLUMN soap_task.task_id is '任务ID';
+COMMENT ON COLUMN soap_task.function_id is '功能ID';
+COMMENT ON COLUMN soap_task.status is '状态';
+COMMENT ON COLUMN soap_task.user_id is '指派人员';
+COMMENT ON COLUMN soap_task.complete_user is '完成人员';
+COMMENT ON COLUMN soap_task.complete_time is '完成时间';
+COMMENT ON COLUMN soap_task.parent_id is '父任务';
+COMMENT ON COLUMN soap_task.title is '标题';
+
+create table soap_codes(
+  type varchar2(20),
+  code varchar2(20),
+  name varchar2(100),
+  name_e varchar2(100),
+  status char(2) default '00',
+  create_user varchar2(32) default 'system',
+  create_time TIMESTAMP default sysdate,
+  update_user varchar2(32),
+  update_time TIMESTAMP,
+  CONSTRAINT fk_code_type PRIMARY KEY (type,code)
+);
+COMMENT ON TABLE soap_codes is '基础数据';
+COMMENT ON COLUMN soap_codes.type is '类型';
+COMMENT ON COLUMN soap_codes.code is '数据';
+COMMENT ON COLUMN soap_codes.name is '中文名称';
+COMMENT ON COLUMN soap_codes.name_e is '英文名称';
+COMMENT ON COLUMN soap_codes.status is '状态';

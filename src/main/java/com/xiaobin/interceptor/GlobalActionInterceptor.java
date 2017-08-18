@@ -6,22 +6,27 @@ import com.jfinal.core.Controller;
 import com.xiaobin.model.ReturnModel;
 import com.xiaobin.util.Const;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 全局拦截器
  * Created by XWB on 2017-05-29.
  */
 public class GlobalActionInterceptor implements Interceptor{
+    private List<String> ignoreList = Arrays.asList("/","/login");
     public void intercept(Invocation invocation) {
         Controller ctrl = invocation.getController();
+        System.out.println(invocation.getActionKey());
         try{
-            String userId = "f0adbc906eb74d08816ce34a424625c3";
-            String userName = "xwb";
-            if(ctrl.getSession() == null || ctrl.getSessionAttr(Const.LOGIN_ID) == null){
+            if((ctrl.getSession() == null || ctrl.getSessionAttr(Const.LOGIN_ID) == null) && !ignoreList.contains(invocation.getActionKey())){
                 //未登陆，以后处理
-                ctrl.setSessionAttr(Const.LOGIN_ID,userId);
-                ctrl.setSessionAttr(Const.LOGIN_NAME,userName);
+                ReturnModel model = new ReturnModel();
+                model.setCode(-101);
+                ctrl.renderJson(model);
+            }else{
+                invocation.invoke();
             }
-            invocation.invoke();
         } catch(Exception e){
             e.printStackTrace();
             ReturnModel model = new ReturnModel();

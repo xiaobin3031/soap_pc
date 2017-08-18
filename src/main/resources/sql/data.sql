@@ -10,6 +10,8 @@ insert into SOAP_PRODUCT(prod_id,prod_name,parent_id)
 values('workspace','工作空间',null);
 insert into SOAP_PRODUCT(prod_id,prod_name,parent_id)
 values('weekreport','周报','workspace');
+insert into SOAP_PRODUCT(prod_id,prod_name,parent_id)
+    values('task','任务','workspace');
 
 insert into SOAP_PRODUCT(prod_id,prod_name,parent_id)
     values('projectManage','项目管理',null);

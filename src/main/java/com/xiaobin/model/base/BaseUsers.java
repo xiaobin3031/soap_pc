@@ -121,4 +121,12 @@ public abstract class BaseUsers<M extends BaseUsers<M>> extends Model<M> impleme
 		return get("is_trip");
 	}
 
+	public void setPassword(java.lang.String password) {
+		set("password", password);
+	}
+
+	public java.lang.String getPassword() {
+		return get("password");
+	}
+
 }

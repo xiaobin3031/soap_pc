@@ -1,0 +1,47 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">查询</h4>
+        </div>
+        <div class="modal-body">
+            <form id="taskSearchForm" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="control-label col-sm-2">标题</div>
+                    <div class="col-sm-4">
+                        <input title="title" name="task.title" class="form-control" />
+                    </div>
+                    <div class="control-label col-sm-2">描述</div>
+                    <div class="col-sm-4">
+                        <input title="notes" name="task.notes" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label col-sm-2">状态</div>
+                    <div class="col-sm-4">
+                        <select title="status" name="task.status" class="form-control"></select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+<script>
+    var $taskSearchForm = $('#taskSearchForm');
+    $('#taskSearchModal').find('div.modal-footer').load('/page/common/searchFooter.html');
+    $taskSearchForm.find('select[name="task.status"]').empty().append(X.selectFromConst(constants.taskStatus));
+    $taskSearchForm.validate({
+       submitHandler : function(form){
+           var oData = {};
+           $($(form).serializeArray()).each(function(){
+                oData[this.name] = this.value;
+           });
+           if($('#tasked').css('display') != 'none'){
+               $('#taskedTable').bootstrapTable('refresh',{query : oData});
+           }else{
+               $('#taskTable').bootstrapTable('refresh',{query : oData});
+           }
+       }
+    });
+
+</script>

@@ -2,16 +2,29 @@ var X = {
     option:{
         debug:true
     },
-    ajax:function(data,callback,url){
+    ajax:function(data,callback,url,errorCall){
         if(!url) return;
+        if(!$.cookie('UserId') && url != 'login'){
+            $('#loginModal').modal('show');
+            return;
+        }
         var s = {};
         s.type="POST";
         s.url = "/" + url;
         s.data = data;
-        s.success = callback;
-        s.error = function(){
-            X.dialog(false,"请求发生异常");
+        s.success = function(data){
+            if(data.code == -101){
+                $('#loginModal').modal('show');
+                return;
+            }
+            callback(data);
         };
+        if(errorCall == undefined || typeof errorCall != 'function'){
+            errorCall = function(){
+                X.dialog(false,'请求发生异常');
+            }
+        }
+        s.error = errorCall;
         $.ajax(s);
     },
     dialog:function(msg){
@@ -95,7 +108,11 @@ var X = {
         for(var x in oConst){
             t._('<option value="')
                 ._(x)
-                ._('">')
+                ._('"');
+            if(x == '00'){
+                t._(' selected');
+            }
+            t._('>')
                 ._(oConst[x])
                 ._('</option>');
         }
@@ -186,7 +203,12 @@ var X = {
         }
     },
     putDataIntoForm : function(form,data,modal){
-        var $form = $(form);
+        var $form;
+        if(typeof form == jQuery){
+            $form = form;
+        }else{
+            $form = $(form);
+        }
         for(var x in data){
             var $input = $form.find('input[name$=".'+x+'"]');
             if($input.length > 0){
@@ -235,6 +257,15 @@ var X = {
             $errorBtn.bind('click',error);
         }
         $modal.modal('show');
+    },
+    modifyData : function(table,modal){
+        var $table = $(table);
+        var data = $table.bootstrapTable('getSelections');
+        if(data.length == 0){
+            X.dialog('请选择一条数据');
+            return;
+        }
+        X.putDataIntoForm($(modal).find('div.modal-body').find('form'),data[0],modal);
     }
 };
 

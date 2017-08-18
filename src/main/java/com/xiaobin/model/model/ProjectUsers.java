@@ -3,6 +3,7 @@ package com.xiaobin.model.model;
 import com.jfinal.kit.Prop;
 import com.jfinal.plugin.activerecord.Db;
 import com.xiaobin.model.base.BaseProjectUsers;
+import com.xiaobin.util.SUtil;
 import com.xiaobin.util.Util;
 
 import java.util.List;
@@ -16,7 +17,16 @@ public class ProjectUsers extends BaseProjectUsers<ProjectUsers> {
 
 	public List<ProjectUsers> page(ProjectUsers projectUsers){
 		Prop p = Util.getProp("dao/projectManage/projectUsers");
-		return find(p.get("query"));
+		String sql = p.get("query");
+		SUtil sUtil = new SUtil();
+		String value = projectUsers.get("functionName");
+		if(!Util.isEmpty(value)){
+			sql += " and pf.function_name like ?";
+			sUtil.addValues("%" + value + "%");
+		}
+		projectUsers.remove("functionName");
+		sUtil.condition(projectUsers.toRecord(),"pu");
+		return find(sql + sUtil.getSql(),sUtil.getValues().toArray());
 	}
 
 	public void deleteProjectUserFunctions(ProjectUsers projectUsers){

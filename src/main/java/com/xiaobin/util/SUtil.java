@@ -22,16 +22,30 @@ public class SUtil {
         return values;
     }
 
+    public void addValues(Object value){
+        values.add(value);
+    }
+
     public SUtil(){
 
     }
 
-    public void condition(Record record){
+    public void condition(Record record,String alias){
         record = record.removeNullValueColumns();
         String[] columns = record.getColumnNames();
-        for(String column : columns){
-            sql.append(" and ").append(column).append(" = ?");
-            values.add(record.get(column));
+        if(Util.isEmpty(alias)){
+            for(String column : columns){
+                sql.append(" and ").append(column).append(" = ?");
+                values.add(record.get(column));
+            }
+        }else{
+            for(String column : columns){
+                sql.append(" and ").append(alias).append(".").append(column).append(" = ?");
+                values.add(record.get(column));
+            }
         }
+
     }
+
+
 }

@@ -16,6 +16,7 @@ public class ProjectUsersCtrl extends BaseCtrl{
 
     public void list(){
         ProjectUsers projectUsers = getModel(ProjectUsers.class);
+        projectUsers.put("functionName",getPara("function_name"));
         ProjectUsersService projectUsersService = Duang.duang(ProjectUsersService.class);
         List<ProjectUsers> list = projectUsersService.page(projectUsers);
         renderJson(list);
@@ -29,6 +30,15 @@ public class ProjectUsersCtrl extends BaseCtrl{
         projectUsers.put("functionIds",functionIds);
         ProjectUsersService projectUsersService = Duang.duang(ProjectUsersService.class);
         projectUsersService.save(projectUsers);
+        renderJson(getSuccessModel());
+    }
+
+    public void update(){
+        ProjectUsers projectUsers = getModel(ProjectUsers.class);
+        projectUsers.setUpdateUser(getUserId());
+        projectUsers.setUpdateTime(Util.currentTimeStamp());
+        ProjectUsersService projectUsersService = Duang.duang(ProjectUsersService.class);
+        projectUsersService.update(projectUsers);
         renderJson(getSuccessModel());
     }
 }

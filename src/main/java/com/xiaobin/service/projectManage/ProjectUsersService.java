@@ -44,4 +44,11 @@ public class ProjectUsersService extends BaseService{
             throw new RuntimeException("保存失败");
         }
     }
+
+    public void update(ProjectUsers projectUsers){
+        boolean result = Db.update("soap_project_users","project_id,function_id",projectUsers.toRecord());
+        if(!result){
+            throw new RuntimeException("更新失败");
+        }
+    }
 }

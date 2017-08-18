@@ -12,6 +12,10 @@
       <param-name>configClass</param-name>
       <param-value>com.xiaobin.main.MainConfig</param-value>
     </init-param>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
   </filter>
 <filter-mapping>
   <filter-name>jfinal</filter-name>

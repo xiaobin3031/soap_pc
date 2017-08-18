@@ -7,6 +7,7 @@ import com.xiaobin.model.model.UserAttr;
 import com.xiaobin.model.model.UserOperate;
 import com.xiaobin.model.model.Users;
 import com.xiaobin.service.base.BaseService;
+import com.xiaobin.util.Security;
 import com.xiaobin.util.Util;
 
 import java.util.List;
@@ -34,11 +35,13 @@ public class UsersService extends BaseService{
             if(user != null){
                 throw new RuntimeException("用户已存在");
             }
+            users.setPassword(Security.security(users.getPassword()));
             users.setUserId(Util.uuid());
             users.setCreateUser(userId);
             users.setCreateTime(Util.currentTimeStamp());
             users.save();
         }else{
+            users.remove("password");
             users.setUpdateUser(userId);
             users.setUpdateTime(Util.currentTimeStamp());
             users.update();
@@ -96,5 +99,20 @@ public class UsersService extends BaseService{
             }
         }
 
+    }
+
+    public void modifyPass(Users users){
+        Users user = Users.dao.findById(users.getUserId());
+        if(user == null){
+            throw new RuntimeException("用户不存在");
+        }
+        if(!user.getPassword().equals(Security.security(users.get("orionPassword")))){
+            throw new RuntimeException("原密码不正确");
+        }
+        users.setPassword(Security.security(users.getPassword()));
+        boolean result = users.update();
+        if(!result){
+            throw new RuntimeException("密码修改失败");
+        }
     }
 }

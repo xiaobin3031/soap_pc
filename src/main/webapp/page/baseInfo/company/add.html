@@ -54,7 +54,7 @@
 </div>
 <script>
     var $companyAddForm = $('#companyAddForm');
-    $('#companyAddForm').validate({
+    $companyAddForm.validate({
         submitHandler : function(form){
             X.ajax($(form).serialize(),function(data){
                 if(data.success){

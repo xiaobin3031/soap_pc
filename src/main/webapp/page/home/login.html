@@ -1,0 +1,40 @@
+<div class="modal-dialog" style="width:30%;">
+    <div class="modal-content">
+        <div class="modal-header" style="text-align:center;">
+            <h4 class="modal-title">登陆</h4>
+        </div>
+        <div class="modal-body">
+            <form id="loginForm" class="form-horizontal">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                    <input title="username" name="login.username" class="form-control" placeholder="Username" />
+                </div>
+                <div class="input-group" style="margin-top:20px;">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                    <input title="password" type="password" name="login.password" class="form-control" placeholder="Password" />
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-success col-sm-12" type="button" onclick="$(this).closest('div.modal-content').find('form').submit()">登陆</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#loginForm').validate({
+       submitHandler : function(form){
+           X.ajax($(form).serialize(),function(data){
+               if(data.success){
+                   $.cookie('UserId',data.user_id);
+                   $(form).closest('div.modal').modal('hide');
+               }else{
+                   X.dialog(data);
+               }
+           },'login');
+       }
+    });
+</script>

@@ -35,7 +35,15 @@
     init();
     function init(){
         calendar = {};
-        addYM();
+        X.ajax({},function(data){
+            if(data && data.length){
+                calendar.taskList = data;
+            }
+            addYM();
+        },'task/unCompleteTask',function(data){
+            X.dialog(data);
+            addYM();
+        });
         printWeek();
     }
     function addYM(y,m){
@@ -114,6 +122,18 @@
                     var $span = $('<span></span>');
                     $span.css('float','right');
                     $span.text(startMoment.date());
+                    if(moment().date() == startMoment.date()
+                        && moment().year() == startMoment.year()
+                        && moment().month() == startMoment.month()){
+                        var $oDiv = $('<div></div>');
+                        $oDiv.text("11111");
+                        $day.append($oDiv);
+                        $span.css({
+                            'font-size' : '1.5em',
+                            'font-weight' : 'bold',
+                            'color' : '#f0882c'
+                        });
+                    }
                     $div.append($span);
                     startMoment = startMoment.add(1,'d');
                     days--;

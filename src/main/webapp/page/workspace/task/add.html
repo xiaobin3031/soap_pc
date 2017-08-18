@@ -1,0 +1,67 @@
+<div class="modal-dialog" style="width:70%;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">新增</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" role="form" id="taskAddForm">
+                <input type="hidden" name="task.task_id" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">标题</div>
+                    <div class="col-sm-4">
+                        <input title="title" name="task.title" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 control-label">功能</div>
+                    <div class="col-sm-4">
+                        <select title="function_id" class="form-control" name="task.function_id"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">指派人</div>
+                    <div class="col-sm-4">
+                        <select title="user_id" class="form-control" name="task.user_id"></select>
+                    </div>
+                    <div class="col-sm-2 control-label">状态</div>
+                    <div class="col-sm-4">
+                        <select title="status" class="form-control" name="task.status"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">描述</div>
+                    <div class="col-sm-10">
+                        <textarea title="task_info" name="task.task_info" rows="3" class="form-control"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+<script>
+    var $taskAddForm = $('#taskAddForm');
+    $('#taskAddModal').find('.modal-footer').load('/page/common/addFooter.html');
+    $taskAddForm.find('select[name="task.status"]').empty().append(X.selectFromConst(constants.taskStatus));
+
+    $taskAddForm.validate({
+        submitHandler : function(form){
+            X.ajax($(form).serialize(),function(data){
+                if(data.success){
+                    $('#taskTable').bootstrapTable("refresh");
+                    $(form).closest('div.modal').find('div.modal-footer').find('button.btn-close').click();
+                }
+            },'task/save');
+        }
+    });
+
+    X.ajax({},function(data){
+        if(data && data.length){
+            var t = new Txt();
+            t._('<option value="">请选择</option>');
+            for(var i in data){
+                t._('<option value="'+data[i].user_id+'">'+data[i].name+'</option>');
+            }
+            $('#taskAddForm').find('select[name="task.user_id"]').empty().append(t.toString());
+        }
+    },'users/queryCurrent');
+
+</script>

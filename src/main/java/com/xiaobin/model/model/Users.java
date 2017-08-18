@@ -2,6 +2,7 @@ package com.xiaobin.model.model;
 
 import com.jfinal.kit.Prop;
 import com.xiaobin.model.base.BaseUsers;
+import com.xiaobin.util.SUtil;
 import com.xiaobin.util.Util;
 
 import java.util.List;
@@ -15,7 +16,9 @@ public class Users extends BaseUsers<Users> {
 
 	public List<Users> query(Users users){
 		Prop p = Util.getProp("dao/sys/users");
-		return find(p.get("query"));
+		SUtil sUtil = new SUtil();
+		sUtil.condition(users.toRecord(),"u");
+		return find(p.get("query") + sUtil.getSql(),sUtil.getValues().toArray());
 	}
 
 	public List<Users> queryCurrent(Users users){

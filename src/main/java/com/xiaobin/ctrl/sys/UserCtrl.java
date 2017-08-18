@@ -77,4 +77,13 @@ public class UserCtrl extends BaseCtrl{
         usersService.userStatus(operate);
         renderJson(getSuccessModel());
     }
+
+    public void modifyPass(){
+        Users users = getModel(Users.class);
+        users.put("orionPassword",getPara("orionPassword"));
+        users.setUserId(getUserId());
+        UsersService usersService = Duang.duang(UsersService.class);
+        usersService.modifyPass(users);
+        renderJson(getSuccessModel());
+    }
 }

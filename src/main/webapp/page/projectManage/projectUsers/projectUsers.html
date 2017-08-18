@@ -2,14 +2,17 @@
     <ul class="buttonlist">
         <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectUsersSearchModal">查询</button></li>
         <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectUsersAddModal">新增</button></li>
+        <li><button class="stdbtn btn_blue" type="button" onclick="modifyProjectUsers()">修改</button></li>
     </ul>
     <table id="projectUsersTable" data-pagination="true"></table>
 </div>
 <div class="modal fade" id="projectUsersSearchModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
 <div class="modal fade" id="projectUsersAddModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
+<div class="modal fade" id="projectUsersModifyModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
 <script>
     $('#projectUsersSearchModal').load('/page/projectManage/projectUsers/search.html');
     $('#projectUsersAddModal').load('/page/projectManage/projectUsers/add.html');
+    $('#projectUsersModifyModal').load('/page/projectManage/projectUsers/modify.html');
 
     X.ajax({},function(data){
         var $userSelect = $('select[name="projectUsers.user_id"]');
@@ -66,4 +69,14 @@
             }
         }]
     });
+
+    function modifyProjectUsers(){
+        var $table = $('#projectUsersTable');
+        var data = $table.bootstrapTable('getSelections');
+        if(data.length == 0){
+            X.dialog('请选择一条数据');
+            return;
+        }
+        X.putDataIntoForm('#projectUsersModifyForm',data[0],'#projectUsersModifyModal');
+    }
 </script>

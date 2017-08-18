@@ -1,0 +1,75 @@
+<div class="pageheader">
+    <ul class="buttonlist" style="margin-left:20px;">
+        <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#taskSearchModal">查询</button></li>
+    </ul>
+    <ul class="hornav">
+        <li class="current"><a href="#tasking">非完结</a></li>
+        <li><a href="#tasked">完结</a></li>
+    </ul>
+</div>
+<div class="contentwrapper">
+    <div class="subcontent" id="tasking">
+        <ul class="buttonlist">
+            <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#taskAddModal">新增</button></li>
+            <li><button class="btn btn-info" type="button" onclick="X.modifyData('#taskTable','#taskAddModal')">修改</button></li>
+        </ul>
+        <table id="taskTable" data-pagination="true"></table>
+    </div>
+    <div class="subcontent" id="tasked" style="display:none;">
+        <table id="taskedTable" data-pagination="true"></table>
+    </div>
+</div>
+<div class="modal fade" id="taskSearchModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
+<div class="modal fade" id="taskAddModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
+<script>
+    $('#taskSearchModal').load('page/workspace/task/search.html');
+    $('#taskAddModal').load('page/workspace/task/add.html');
+
+    $('#taskTable').bootstrapTable({
+       url : 'task/unCompleteTask',
+        singleSelect : true,
+        clickToSelect : true,
+        columns : [{
+           field : '',
+            title : '',
+            checkbox : true
+        },{
+           field : 'title',
+            title : '标题'
+        },{
+           field : 'task_info',
+            title : '描述'
+        },{
+           field : 'username',
+            title : '人员'
+        },{
+           field : 'status',
+            title : '状态',
+            formatter : function(v){
+               return constants.taskStatus[v] || v;
+            }
+        }]
+    });
+    $('#taskedTable').bootstrapTable({
+        url : 'task/list?task.status=99',
+        singleSelect : true,
+        clickToSelect : true,
+        columns : [{
+            field : '',
+            title : '',
+            checkbox : true
+        },{
+            field : 'title',
+            title : '标题'
+        },{
+            field : 'task_info',
+            title : '描述'
+        },{
+            field : 'username',
+            title : '人员'
+        },{
+            field : 'update_time_2',
+            title : '完成时间'
+        }]
+    });
+</script>

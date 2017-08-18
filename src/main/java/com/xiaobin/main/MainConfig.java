@@ -17,6 +17,7 @@ import com.xiaobin.ctrl.projectManage.ProjectFunctionsCtrl;
 import com.xiaobin.ctrl.projectManage.ProjectInfoCtrl;
 import com.xiaobin.ctrl.projectManage.ProjectUsersCtrl;
 import com.xiaobin.ctrl.sys.UserCtrl;
+import com.xiaobin.ctrl.workspace.TaskCtrl;
 import com.xiaobin.ctrl.workspace.WeekReportCtrl;
 import com.xiaobin.interceptor.GlobalActionInterceptor;
 import com.xiaobin.model.model._MappingKit;
@@ -49,6 +50,8 @@ public class MainConfig extends JFinalConfig{
         routes.add("/projectFunctions", ProjectFunctionsCtrl.class);
         //项目人员
         routes.add("/projectUsers", ProjectUsersCtrl.class);
+        //任务
+        routes.add("/task", TaskCtrl.class);
     }
 
     public void configEngine(Engine engine) {
