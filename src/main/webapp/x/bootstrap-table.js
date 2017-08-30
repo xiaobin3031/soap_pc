@@ -354,6 +354,7 @@
             detailOpen: 'glyphicon-plus icon-plus',
             detailClose: 'glyphicon-minus icon-minus'
         },
+        treeTable : false,
 
         customSearch: $.noop,
 
