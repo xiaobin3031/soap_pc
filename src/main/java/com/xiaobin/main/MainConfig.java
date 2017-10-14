@@ -16,6 +16,7 @@ import com.xiaobin.ctrl.baseInfo.CompanyCtrl;
 import com.xiaobin.ctrl.projectManage.ProjectFunctionsCtrl;
 import com.xiaobin.ctrl.projectManage.ProjectInfoCtrl;
 import com.xiaobin.ctrl.projectManage.ProjectUsersCtrl;
+import com.xiaobin.ctrl.projectManage.WorkloadCtrl;
 import com.xiaobin.ctrl.sys.UserCtrl;
 import com.xiaobin.ctrl.workspace.TaskCtrl;
 import com.xiaobin.ctrl.workspace.WeekReportCtrl;
@@ -52,6 +53,8 @@ public class MainConfig extends JFinalConfig{
         routes.add("/projectUsers", ProjectUsersCtrl.class);
         //任务
         routes.add("/task", TaskCtrl.class);
+        //工作量评估
+        routes.add("/workload", WorkloadCtrl.class);
     }
 
     public void configEngine(Engine engine) {

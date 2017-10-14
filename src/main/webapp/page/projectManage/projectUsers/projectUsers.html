@@ -1,10 +1,10 @@
 <div class="contentwrapper">
     <ul class="buttonlist">
-        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectUsersSearchModal">查询</button></li>
-        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectUsersAddModal">新增</button></li>
-        <li><button class="stdbtn btn_blue" type="button" onclick="modifyProjectUsers()">修改</button></li>
+        <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#projectUsersSearchModal">查询</button></li>
+        <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#projectUsersAddModal">新增</button></li>
+        <li><button class="btn btn-info" type="button" onclick="modifyProjectUsers()">修改</button></li>
     </ul>
-    <table id="projectUsersTable" data-pagination="true"></table>
+    <table id="projectUsersTable" data-pagination="true" data-detail-view="true"></table>
 </div>
 <div class="modal fade" id="projectUsersSearchModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
 <div class="modal fade" id="projectUsersAddModal" role="dialog" tabindex="-1" data-backdrop="false"></div>
@@ -60,12 +60,6 @@
             title : '职务',
             formatter : function(v){
                return constants.duties[v] || v;
-            }
-        },{
-           field : 'status',
-            title : '状态',
-            formatter : function(v){
-               return constants.userStatus[v] || v;
             }
         }]
     });

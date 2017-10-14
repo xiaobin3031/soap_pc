@@ -1,8 +1,8 @@
 <div class="contentwrapper">
     <ul class="buttonlist">
-        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectFunctionsSearchModal">查询</button></li>
-        <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#projectFunctionsAddModal">新增</button></li>
-        <li><button class="stdbtn btn_blue" type="button" onclick="modifyProjectFunctions()">修改</button></li>
+        <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#projectFunctionsSearchModal">查询</button></li>
+        <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#projectFunctionsAddModal">新增</button></li>
+        <li><button class="btn btn-info" type="button" onclick="modifyProjectFunctions()">修改</button></li>
     </ul>
     <table id="projectFunctionsTable" data-pagination="true"></table>
 </div>
@@ -30,9 +30,6 @@
         },{
            field : 'project_name',
             title : '项目名称'
-        },{
-           field : 'type',
-            title : '类型'
         },{
            field : 'status',
             title : '状态',

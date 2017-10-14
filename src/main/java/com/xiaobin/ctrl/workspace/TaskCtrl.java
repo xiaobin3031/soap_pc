@@ -33,4 +33,12 @@ public class TaskCtrl extends BaseCtrl{
         List<Task> list = taskService.unCompleteTask(task);
         renderJson(list);
     }
+
+    public void taskOnLine(){
+        Task task = new Task();
+        task.setUserId(getUserId());
+        TaskService taskService = Duang.duang(TaskService.class);
+        taskService.taskOnLine(task);
+        renderJson(getSuccessModel());
+    }
 }

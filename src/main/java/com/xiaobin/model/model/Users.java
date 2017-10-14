@@ -16,8 +16,8 @@ public class Users extends BaseUsers<Users> {
 
 	public List<Users> query(Users users){
 		Prop p = Util.getProp("dao/sys/users");
-		SUtil sUtil = new SUtil();
-		sUtil.condition(users.toRecord(),"u");
+		SUtil sUtil = new SUtil(users.toRecord());
+		sUtil.condition("u");
 		return find(p.get("query") + sUtil.getSql(),sUtil.getValues().toArray());
 	}
 

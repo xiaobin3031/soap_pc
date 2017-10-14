@@ -18,14 +18,14 @@ public class ProjectUsers extends BaseProjectUsers<ProjectUsers> {
 	public List<ProjectUsers> page(ProjectUsers projectUsers){
 		Prop p = Util.getProp("dao/projectManage/projectUsers");
 		String sql = p.get("query");
-		SUtil sUtil = new SUtil();
+		SUtil sUtil = new SUtil(projectUsers.toRecord());
 		String value = projectUsers.get("functionName");
 		if(!Util.isEmpty(value)){
 			sql += " and pf.function_name like ?";
 			sUtil.addValues("%" + value + "%");
 		}
 		projectUsers.remove("functionName");
-		sUtil.condition(projectUsers.toRecord(),"pu");
+		sUtil.condition("pu");
 		return find(sql + sUtil.getSql(),sUtil.getValues().toArray());
 	}
 

@@ -220,6 +220,8 @@ create table soap_task(
   status char(2) default '00',
   title varchar2(100) not null,
   task_info varchar2(1000) not null,
+  task_type char(2) default '00',
+  is_next char(1) default '0',
   user_id varchar2(32),
   create_user varchar2(32) not null,
   create_time TIMESTAMP default sysdate,
@@ -237,6 +239,8 @@ COMMENT ON COLUMN soap_task.complete_user is '完成人员';
 COMMENT ON COLUMN soap_task.complete_time is '完成时间';
 COMMENT ON COLUMN soap_task.parent_id is '父任务';
 COMMENT ON COLUMN soap_task.title is '标题';
+COMMENT ON COLUMN soap_task.task_type is '类型';
+COMMENT ON COLUMN soap_task.is_next is '是否下次上线';
 
 create table soap_codes(
   type varchar2(20),
@@ -256,3 +260,9 @@ COMMENT ON COLUMN soap_codes.code is '数据';
 COMMENT ON COLUMN soap_codes.name is '中文名称';
 COMMENT ON COLUMN soap_codes.name_e is '英文名称';
 COMMENT ON COLUMN soap_codes.status is '状态';
+
+-- create table soap_workload(){
+--   id varchar2(32) primary key,
+--   function_id varchar2(32) not null,
+--   demand_
+-- };

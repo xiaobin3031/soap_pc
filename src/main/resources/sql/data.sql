@@ -21,6 +21,8 @@ insert into SOAP_PRODUCT(prod_id,prod_name,parent_id)
     values('projectFunctions','项目功能','projectManage');
 insert into SOAP_PRODUCT(prod_id,prod_name,parent_id)
     values('projectUsers','项目人员','projectManage');
+insert into SOAP_PRODUCT(prod_id,prod_name,parent_id)
+values('workload','工作量评估','projectManage');
 
 insert into SOAP_PRODUCT(prod_id,prod_name,parent_id)
     values('baseInfo','基础信息',null);

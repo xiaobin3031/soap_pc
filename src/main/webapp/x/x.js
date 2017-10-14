@@ -103,13 +103,13 @@ var X = {
     selectFromConst : function(oConst,initSelect){
         var t = new Txt();
         if(initSelect){
-            t._('<option value="">请选择</option>');
+            t._('<option value="" selected>请选择</option>');
         }
         for(var x in oConst){
             t._('<option value="')
                 ._(x)
                 ._('"');
-            if(x == '00'){
+            if(!initSelect && (x == '00' || x == '0')){
                 t._(' selected');
             }
             t._('>')
@@ -240,21 +240,29 @@ var X = {
             $modal.modal('show');
         }
     },
-    confirm : function(success,error){
+    confirm : function(success,error,msg){
+        if(msg == undefined){
+            msg = '是否确认删除';
+        }
         var $modal = $('#confirmModal');
+        $modal.find('div.modal-body').find('p').text(msg);
         var $errorBtn = $modal.find('.modal-footer').find('.btn-success');
         var $successBtn = $modal.find('.modal-footer').find('.btn-danger');
         if(success == undefined || typeof success != 'function'){
             $successBtn.attr('data-dismiss','modal');
         }else{
             $successBtn.unbind('click');
-            $successBtn.bind('click',success);
+            $successBtn.bind('click',function(){
+                success($modal);
+            });
         }
         if(error == undefined || typeof error != 'function'){
             $errorBtn.attr('data-dismiss','modal');
         }else{
             $errorBtn.unbind('click');
-            $errorBtn.bind('click',error);
+            $errorBtn.bind('click',function(){
+                error($modal);
+            });
         }
         $modal.modal('show');
     },

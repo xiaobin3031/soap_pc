@@ -12,7 +12,7 @@
                     </div>
                     <div class="control-label col-sm-2">描述</div>
                     <div class="col-sm-4">
-                        <input title="notes" name="task.notes" class="form-control" />
+                        <input title="notes" name="task.task_info" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -29,7 +29,7 @@
 <script>
     var $taskSearchForm = $('#taskSearchForm');
     $('#taskSearchModal').find('div.modal-footer').load('/page/common/searchFooter.html');
-    $taskSearchForm.find('select[name="task.status"]').empty().append(X.selectFromConst(constants.taskStatus));
+    $taskSearchForm.find('select[name="task.status"]').empty().append(X.selectFromConst(constants.taskStatus,true));
     $taskSearchForm.validate({
        submitHandler : function(form){
            var oData = {};
@@ -37,10 +37,15 @@
                 oData[this.name] = this.value;
            });
            if($('#tasked').css('display') != 'none'){
+               delete oData['task.status'];
                $('#taskedTable').bootstrapTable('refresh',{query : oData});
+           }else if ($('#taskNextUpdate').css('display') != 'none'){
+               delete oData['task.status'];
+               $('#taskNextTable').bootstrapTable('refresh',{query : oData});
            }else{
                $('#taskTable').bootstrapTable('refresh',{query : oData});
            }
+           $(form).closest('div.modal').modal('hide');
        }
     });
 

@@ -7,10 +7,11 @@
 <div class="contentwrapper">
     <div id="userCurrent" class="subcontent">
         <ul class="buttonlist">
-            <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#userAddModal">新增</button></li>
-            <li><button class="stdbtn btn_blue" type="button" onclick="modifyUsers()">修改</button></li>
-            <li><button class="stdbtn btn_blue" type="button" data-toggle="modal" data-target="#userStatusModal">修改状态</button></li>
+            <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#userAddModal">新增</button></li>
+            <li><button class="btn btn-info" type="button" onclick="modifyUsers()">修改</button></li>
+            <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#userStatusModal">修改状态</button></li>
             <li><button class="btn btn-info" type="button" onclick="modifyPass()">修改密码</button></li>
+            <li><button class="btn btn-info" type="button" onclick="userScore()">评分</button></li>
         </ul>
         <table id="userTable" data-pagination="true">
         </table>
@@ -83,5 +84,14 @@
             return;
         }
         $('#userPasswordModal').modal('show');
+    }
+    function userScore(){
+        var $table = $('#userTable');
+        var data = $table.bootstrapTable("getSelections");
+        if(data.length == 0){
+            X.dialog("请选择一条数据");
+            return;
+        }
+
     }
 </script>

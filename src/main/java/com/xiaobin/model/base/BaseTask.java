@@ -113,4 +113,20 @@ public abstract class BaseTask<M extends BaseTask<M>> extends Model<M> implement
 		return get("complete_time");
 	}
 
+	public void setTaskType(java.lang.String taskType) {
+		set("task_type", taskType);
+	}
+
+	public java.lang.String getTaskType() {
+		return get("task_type");
+	}
+
+	public void setIsNext(java.lang.String isNext) {
+		set("is_next", isNext);
+	}
+
+	public java.lang.String getIsNext() {
+		return get("is_next");
+	}
+
 }

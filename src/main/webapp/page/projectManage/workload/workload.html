@@ -1,0 +1,23 @@
+<div class="contentwrapper">
+    <ul class="buttonlist">
+        <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#workloadSearchModal">查询</button></li>
+        <li><button class="btn btn-info" type="button" data-toggle="modal" data-target="#workloadAddModal">新增</button></li>
+        <li><button class="btn btn-info" type="button" onclick="modifyWorkload()">修改</button></li>
+    </ul>
+    <table id="workloadTable" data-pagination="true"></table>
+</div>
+<div class="modal fade" role="dialog" tabindex="-1" id="workloadSearchModal" data-backdrop="false"></div>
+<div class="modal fade" role="dialog" tabindex="-1" id="workloadAddModal" data-backdrop="false"></div>
+<script>
+    $('#workloadSearchModal').load('/page/projectManage/workload/search.html');
+    $('#workloadAddModal').load('/page/projectManage/workload/add.html');
+    function modifyWorkload(){
+        var $table = $('#workloadTable');
+        var data = $table.bootstrapTable('getSelections');
+        if(data.length == 0){
+            X.dialog('请选择一条数据');
+            return;
+        }
+        X.putDataIntoForm('#projectUsersModifyForm',data[0],'#projectUsersModifyModal');
+    }
+</script>

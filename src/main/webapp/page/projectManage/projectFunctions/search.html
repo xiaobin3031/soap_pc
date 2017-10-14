@@ -10,6 +10,10 @@
                     <div class="col-sm-4">
                         <select title="project_id" name="projectFunctions.project_id" class="form-control"></select>
                     </div>
+                    <div class="control-label col-sm-2">状态</div>
+                    <div class="col-sm-4">
+                        <select title="status" name="projectFunctions.status" class="form-control"></select>
+                    </div>
                 </div>
             </form>
         </div>
@@ -26,7 +30,9 @@
     </div>
 </div>
 <script>
-    $('#projectFunctionsSearchForm').validate({
+    var $projectFunctionsSearchForm = $('#projectFunctionsSearchForm');
+    $projectFunctionsSearchForm.find('select[name="projectFunctions.status"]').empty().append(X.selectFromConst(constants.projectFunctionsStatus,true));
+    $projectFunctionsSearchForm.validate({
        submitHandler : function(form){
            var ser = $(form).serialize();
            var data = {};
