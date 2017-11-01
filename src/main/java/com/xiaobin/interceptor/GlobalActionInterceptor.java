@@ -14,7 +14,7 @@ import java.util.List;
  * Created by XWB on 2017-05-29.
  */
 public class GlobalActionInterceptor implements Interceptor{
-    private List<String> ignoreList = Arrays.asList("/","/login");
+    private List<String> ignoreList = Arrays.asList("/","/login","/sync");
     public void intercept(Invocation invocation) {
         Controller ctrl = invocation.getController();
         System.out.println(invocation.getActionKey());
